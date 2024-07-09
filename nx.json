@@ -33,8 +33,7 @@
       "plugin": "@nx/jest/plugin",
       "options": {
         "targetName": "test"
-      },
-      "exclude": ["apps/kir-mail-e2e/**/*"]
+      }
     }
   ],
   "nxCloudAccessToken": "NzQ4OGQzYTUtMTc0NS00MGY3LWI0NjYtMzYzMDRhZDUzMzQ4fHJlYWQtd3JpdGU="

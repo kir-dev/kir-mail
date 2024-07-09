@@ -1,5 +1,5 @@
 {
-  "name": "kir-mail",
+  "name": "gateway",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/kir-mail/src",
   "projectType": "application",
