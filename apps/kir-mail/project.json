@@ -1,0 +1,24 @@
+{
+  "name": "kir-mail",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/kir-mail/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "kir-mail:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "kir-mail:build:development"
+        },
+        "production": {
+          "buildTarget": "kir-mail:build:production"
+        }
+      }
+    }
+  }
+}
