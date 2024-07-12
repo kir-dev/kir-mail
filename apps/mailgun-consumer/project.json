@@ -1,5 +1,5 @@
 {
-  "name": "gateway",
+  "name": "mailgun-consumer",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/kir-mail/src",
   "projectType": "application",
@@ -8,7 +8,7 @@
     "test": {
       "executor": "@nrwl/jest:jest",
       "options": {
-        "jestConfig": "apps/gateway/jest.config.ts"
+        "jestConfig": "apps/mailgun-consumer/jest.config.ts"
       }
     },
     "build": {
@@ -18,10 +18,10 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
-        "outputPath": "dist/apps/gateway",
-        "main": "apps/gateway/src/main.ts",
-        "tsConfig": "apps/gateway/tsconfig.json",
-        "webpackConfig": "apps/gateway/webpack.config.js"
+        "outputPath": "dist/apps/mailgun-consumer",
+        "main": "apps/mailgun-consumer/src/main.ts",
+        "tsConfig": "apps/mailgun-consumer/tsconfig.json",
+        "webpackConfig": "apps/mailgun-consumer/webpack.config.js"
       },
       "configurations": {
         "development": {},
@@ -32,14 +32,14 @@
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "gateway:build"
+        "buildTarget": "mailgun-consumer:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "gateway:build:development"
+          "buildTarget": "mailgun-consumer:build:development"
         },
         "production": {
-          "buildTarget": "gateway:build:production"
+          "buildTarget": "mailgun-consumer:build:production"
         }
       }
     },
@@ -49,7 +49,7 @@
     },
     "docker-build": {
       "dependsOn": ["build"],
-      "command": "docker build -f apps/gateway/Dockerfile . -t ticketpond-gateway"
+      "command": "docker build -f apps/mailgun-consumer/Dockerfile . -t ticketpond-mailgun-consumer"
     }
   }
 }

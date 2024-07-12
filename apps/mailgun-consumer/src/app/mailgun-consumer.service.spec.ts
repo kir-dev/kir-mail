@@ -1,16 +1,16 @@
 import { Test } from '@nestjs/testing';
 
-import { GatewayService } from './gateway.service';
+import { MailgunConsumerService } from './mailgun-consumer.service';
 
-describe('MailgunConsumerService', () => {
-  let service: GatewayService;
+describe('AppService', () => {
+  let service: MailgunConsumerService;
 
   beforeAll(async () => {
     const app = await Test.createTestingModule({
-      providers: [GatewayService],
+      providers: [MailgunConsumerService],
     }).compile();
 
-    service = app.get<GatewayService>(GatewayService);
+    service = app.get<MailgunConsumerService>(MailgunConsumerService);
   });
 
   describe('getData', () => {
