@@ -1,15 +1,16 @@
 import { SingleSendRequestDto } from '@kir-mail/types';
-import { Inject, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
-import { ClientKafka } from '@nestjs/microservices';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import { Queue } from 'bullmq';
 
 @Injectable()
 export class GatewayService {
   private readonly logger = new Logger(GatewayService.name);
-  constructor(@Inject('KAFKA_CLIENT') private kafkaClient: ClientKafka) {}
+  constructor(@InjectQueue('send') private sendQueue: Queue) {}
 
-  sendMessage(request: SingleSendRequestDto): void {
+  async sendMessage(request: SingleSendRequestDto) {
     try {
-      this.kafkaClient.emit('send', request);
+      await this.sendQueue.add('send', request);
       this.logger.debug(`Message queued for sending: ${request.subject}`);
     } catch (e) {
       throw new InternalServerErrorException(e.message);

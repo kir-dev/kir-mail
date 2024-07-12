@@ -1,33 +1,21 @@
+import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
-import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 
-import { ConfigService } from './config.service';
+import { REDIS_HOST, REDIS_PORT } from '../config';
 import { GatewayController } from './gateway.controller';
 import { GatewayService } from './gateway.service';
 
 @Module({
-  imports: [],
-  controllers: [GatewayController],
-  providers: [
-    GatewayService,
-    {
-      provide: 'KAFKA_CLIENT',
-      useFactory: (configService: ConfigService) =>
-        ClientProxyFactory.create({
-          transport: Transport.KAFKA,
-          options: {
-            client: {
-              clientId: 'gateway',
-              brokers: [configService.get('kafkaBroker')],
-            },
-            producer: {
-              allowAutoTopicCreation: true,
-            },
-          },
-        }),
-      inject: [ConfigService],
-    },
-    ConfigService,
+  imports: [
+    BullModule.registerQueue({
+      name: 'send',
+      connection: {
+        host: REDIS_HOST,
+        port: REDIS_PORT,
+      },
+    }),
   ],
+  controllers: [GatewayController],
+  providers: [GatewayService],
 })
 export class GatewayModule {}

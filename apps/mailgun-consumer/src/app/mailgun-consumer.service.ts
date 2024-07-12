@@ -1,20 +1,29 @@
-import { EmailConsumerService } from '@kir-mail/email-consumer';
 import { SingleSendRequestDto } from '@kir-mail/types';
+import { OnQueueEvent, Processor, WorkerHost } from '@nestjs/bullmq';
 import { Injectable, Logger } from '@nestjs/common';
+import { Job } from 'bullmq';
 
+const MESSAGES_PER_MONTH = 1_000_000;
+
+const RESET_INTERVAL = 10 * 1000;
+
+@Processor('send', {
+  limiter: {
+    max: MESSAGES_PER_MONTH / ((30 * 24 * 60 * 60 * 1000) / RESET_INTERVAL),
+    duration: RESET_INTERVAL,
+  },
+})
 @Injectable()
-export class MailgunConsumerService implements EmailConsumerService {
-  private counter = 0;
+export class MailgunConsumerService extends WorkerHost {
   private readonly logger = new Logger(MailgunConsumerService.name);
-  send(sendRequest: SingleSendRequestDto) {
-    this.randomError();
-    this.counter++;
-    this.logger.log(`Sending email to ${sendRequest.to}, counter: ${this.counter}`);
+
+  process(job: Job<SingleSendRequestDto>) {
+    this.logger.log(`Processing job: ${job.id} with data: ${JSON.stringify(job.data)}`);
+    return Promise.resolve(undefined);
   }
 
-  private randomError() {
-    if (Math.random() < 0.1) {
-      throw new Error('Random error occurred');
-    }
+  @OnQueueEvent('active')
+  onActive(job: Job) {
+    this.logger.log(`Job ${job.id} is active`);
   }
 }

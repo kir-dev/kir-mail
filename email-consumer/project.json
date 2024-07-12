@@ -1,9 +1,0 @@
-{
-  "name": "email-consumer",
-  "$schema": "../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "email-consumer/src",
-  "projectType": "library",
-  "tags": [],
-  "// targets": "to see all targets run: nx show project email-consumer --web",
-  "targets": {}
-}

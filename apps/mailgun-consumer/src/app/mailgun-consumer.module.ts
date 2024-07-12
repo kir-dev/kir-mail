@@ -1,11 +1,19 @@
+import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
 
-import { MailgunConsumerController } from './mailgun-consumer.controller';
 import { MailgunConsumerService } from './mailgun-consumer.service';
 
 @Module({
-  imports: [],
-  controllers: [MailgunConsumerController],
+  imports: [
+    BullModule.registerQueue({
+      name: 'send',
+      connection: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
+  ],
+  controllers: [],
   providers: [MailgunConsumerService],
 })
 export class MailgunConsumerModule {}
