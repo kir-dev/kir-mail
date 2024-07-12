@@ -34,7 +34,7 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": ["apps/mailgun-consumer-e2e/**/*"]
+      "exclude": ["apps/mailgun-consumer-e2e/**/*", "apps/microsoft-consumer-e2e/**/*"]
     }
   ],
   "nxCloudAccessToken": "NzQ4OGQzYTUtMTc0NS00MGY3LWI0NjYtMzYzMDRhZDUzMzQ4fHJlYWQtd3JpdGU="

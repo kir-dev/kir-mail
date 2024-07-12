@@ -1,0 +1,55 @@
+{
+  "name": "microsoft-consumer",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/kir-mail/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/microsoft-consumer/jest.config.ts"
+      }
+    },
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/microsoft-consumer",
+        "main": "apps/microsoft-consumer/src/main.ts",
+        "tsConfig": "apps/microsoft-consumer/tsconfig.json",
+        "webpackConfig": "apps/microsoft-consumer/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "microsoft-consumer:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "microsoft-consumer:build:development"
+        },
+        "production": {
+          "buildTarget": "microsoft-consumer:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/microsoft-consumer/Dockerfile . -t ticketpond-microsoft-consumer"
+    }
+  }
+}

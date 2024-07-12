@@ -3,9 +3,9 @@ import { SingleSendRequestDto } from '@kir-mail/types';
 import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
-export class MailgunConsumerService implements EmailConsumerService {
+export class MicrosoftConsumerService implements EmailConsumerService {
   private counter = 0;
-  private readonly logger = new Logger(MailgunConsumerService.name);
+  private readonly logger = new Logger(MicrosoftConsumerService.name);
   send(sendRequest: SingleSendRequestDto) {
     this.randomError();
     this.counter++;

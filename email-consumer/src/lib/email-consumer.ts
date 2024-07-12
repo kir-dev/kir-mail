@@ -26,17 +26,11 @@ export class EmailConsumer implements OnModuleInit, OnModuleDestroy {
 
   @EventPattern('send')
   send(@Payload() sendRequestDto: SingleSendRequestDto, @Ctx() context: KafkaContext) {
-    const topic = context.getTopic();
-    const consumer = context.getConsumer();
+    if (this.messageCount >= this.maxMessagePerInterval) throw new Error('Throttling limit reached');
 
     this.emailConsumerService.send(sendRequestDto);
 
     this.messageCount++;
-
-    if (this.messageCount >= this.maxMessagePerInterval) {
-      this.logger.log('Throttling limit reached, pausing consumer');
-      this.pauseConsumer(consumer, topic);
-    }
   }
 
   onModuleInit() {

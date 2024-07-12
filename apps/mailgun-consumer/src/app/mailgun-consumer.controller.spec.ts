@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MailgunConsumerController } from './mailgun-consumer.controller';
 import { MailgunConsumerService } from './mailgun-consumer.service';
 
-describe('AppController', () => {
+describe('MicrosoftConsumerController', () => {
   let app: TestingModule;
 
   beforeAll(async () => {

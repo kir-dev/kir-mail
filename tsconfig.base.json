@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@kir-mail/email-consumer": ["email-consumer/src/index.ts"],
+      "@kir-mail/microsoft-consumer": ["microsoft-consumer/src/index.ts"],
       "@kir-mail/types": ["types/src/index.ts"]
     }
   },

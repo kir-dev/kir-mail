@@ -20,11 +20,7 @@ import { GatewayService } from './gateway.service';
               clientId: 'gateway',
               brokers: [configService.get('kafkaBroker')],
             },
-            run: {
-              autoCommit: false,
-            },
-            consumer: {
-              groupId: 'gateway',
+            producer: {
               allowAutoTopicCreation: true,
             },
           },
