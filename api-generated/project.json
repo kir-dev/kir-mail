@@ -1,0 +1,9 @@
+{
+  "name": "api-generated",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "api-generated/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project api-generated --web",
+  "targets": {}
+}

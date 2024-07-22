@@ -1,7 +1,9 @@
 import { SingleSendRequestDto } from '@kir-mail/types';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
-import { Queue } from 'bullmq';
+import { Job, Queue } from 'bullmq';
+
+import { AnalyticsDto } from '../types/response.type';
 
 @Injectable()
 export class GatewayService {
@@ -15,5 +17,31 @@ export class GatewayService {
     } catch (e) {
       throw new InternalServerErrorException(e.message);
     }
+  }
+
+  async getData(): Promise<AnalyticsDto> {
+    const rawCompletedJobs = await this.sendQueue.getJobs(['completed']);
+    const rawFailedJobs = await this.sendQueue.getJobs(['failed']);
+
+    const completedJobs = this.mapJobsToDto(rawCompletedJobs, 'completed');
+    const failedJobs = this.mapJobsToDto(rawFailedJobs, 'failed');
+    return {
+      items: [...completedJobs, ...failedJobs],
+      completedTimestamps: this.mapJobsToTimestamps(rawCompletedJobs),
+      failedTimestamps: this.mapJobsToTimestamps(rawFailedJobs),
+    };
+  }
+
+  private mapJobsToDto(jobs: Job<SingleSendRequestDto>[], status: string) {
+    return jobs.map((job) => ({
+      id: job.id,
+      data: job.data,
+      status: status,
+      timestamp: job.timestamp,
+    }));
+  }
+
+  private mapJobsToTimestamps(jobs: Job<SingleSendRequestDto>[]) {
+    return jobs.map((job) => job.timestamp);
   }
 }

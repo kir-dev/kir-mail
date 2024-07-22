@@ -35,7 +35,34 @@
         "targetName": "test"
       },
       "exclude": ["apps/mailgun-consumer-e2e/**/*", "apps/microsoft-consumer-e2e/**/*"]
+    },
+    {
+      "plugin": "@nx/vite/plugin",
+      "options": {
+        "buildTargetName": "build",
+        "testTargetName": "test",
+        "serveTargetName": "serve",
+        "previewTargetName": "preview",
+        "serveStaticTargetName": "serve-static"
+      }
     }
   ],
-  "nxCloudAccessToken": "NzQ4OGQzYTUtMTc0NS00MGY3LWI0NjYtMzYzMDRhZDUzMzQ4fHJlYWQtd3JpdGU="
+  "nxCloudAccessToken": "NzQ4OGQzYTUtMTc0NS00MGY3LWI0NjYtMzYzMDRhZDUzMzQ4fHJlYWQtd3JpdGU=",
+  "generators": {
+    "@nx/react": {
+      "application": {
+        "babel": true,
+        "style": "tailwind",
+        "linter": "eslint",
+        "bundler": "vite"
+      },
+      "component": {
+        "style": "tailwind"
+      },
+      "library": {
+        "style": "tailwind",
+        "linter": "eslint"
+      }
+    }
+  }
 }
