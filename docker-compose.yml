@@ -4,6 +4,18 @@ services:
     image: redis:latest
     ports:
       - 6379:6379
+  database:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: pgpassword
+      POSTGRES_DB: kirmail
+    volumes:
+      - kir-mail-db:/var/lib/postgresql/data
 networks:
   default:
     name: kir-mail-network
+volumes:
+  kir-mail-db:

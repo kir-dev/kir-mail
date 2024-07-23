@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { cn } from '../../utils/cn';
 import { Authenticator } from './authenticator';
+import { Button } from './button';
 
 export function Header() {
   const [onTop, setOnTop] = useState(true);
@@ -27,7 +28,13 @@ export function Header() {
     >
       <div className='flex justify-between items-center container mx-auto'>
         <h1>Kir-Mail Dashboard</h1>
-        <Authenticator />
+        <div className='flex items-center gap-5'>
+          <Button variant='link' asChild className='p-0'>
+            <a href='/token'>Tokens</a>
+          </Button>
+          <div className='h-6 w-0.5 rounded-full bg-slate-200' />
+          <Authenticator />
+        </div>
       </div>
     </header>
   );

@@ -82,6 +82,25 @@ export interface AnalyticsDto {
 /**
  * 
  * @export
+ * @interface CreateTokenDto
+ */
+export interface CreateTokenDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTokenDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateTokenDto
+     */
+    'quota': number;
+}
+/**
+ * 
+ * @export
  * @interface ResponseDto
  */
 export interface ResponseDto {
@@ -128,6 +147,68 @@ export interface SingleSendRequestDto {
      * @memberof SingleSendRequestDto
      */
     'html': string;
+}
+/**
+ * 
+ * @export
+ * @interface TokenDto
+ */
+export interface TokenDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof TokenDto
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TokenDto
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TokenDto
+     */
+    'updatedAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TokenDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TokenDto
+     */
+    'value': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof TokenDto
+     */
+    'quota': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TokenDto
+     */
+    'used': number;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateTokenQuotaDto
+ */
+export interface UpdateTokenQuotaDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateTokenQuotaDto
+     */
+    'quota': number;
 }
 /**
  * 
@@ -585,6 +666,309 @@ export class GatewayApi extends BaseAPI {
      */
     public gatewayControllerSendMessage(singleSendRequestDto: SingleSendRequestDto, options?: RawAxiosRequestConfig) {
         return GatewayApiFp(this.configuration).gatewayControllerSendMessage(singleSendRequestDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TokenApi - axios parameter creator
+ * @export
+ */
+export const TokenApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateTokenDto} createTokenDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        tokenControllerCreateToken: async (createTokenDto: CreateTokenDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createTokenDto' is not null or undefined
+            assertParamExists('tokenControllerCreateToken', 'createTokenDto', createTokenDto)
+            const localVarPath = `/api/token`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createTokenDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        tokenControllerDeleteToken: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('tokenControllerDeleteToken', 'id', id)
+            const localVarPath = `/api/token/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        tokenControllerGetTokens: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/token`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {UpdateTokenQuotaDto} updateTokenQuotaDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        tokenControllerUpdateTokenQuota: async (id: string, updateTokenQuotaDto: UpdateTokenQuotaDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('tokenControllerUpdateTokenQuota', 'id', id)
+            // verify required parameter 'updateTokenQuotaDto' is not null or undefined
+            assertParamExists('tokenControllerUpdateTokenQuota', 'updateTokenQuotaDto', updateTokenQuotaDto)
+            const localVarPath = `/api/token/{id}/quota`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateTokenQuotaDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TokenApi - functional programming interface
+ * @export
+ */
+export const TokenApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TokenApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateTokenDto} createTokenDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async tokenControllerCreateToken(createTokenDto: CreateTokenDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TokenDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.tokenControllerCreateToken(createTokenDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TokenApi.tokenControllerCreateToken']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async tokenControllerDeleteToken(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.tokenControllerDeleteToken(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TokenApi.tokenControllerDeleteToken']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async tokenControllerGetTokens(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TokenDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.tokenControllerGetTokens(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TokenApi.tokenControllerGetTokens']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {UpdateTokenQuotaDto} updateTokenQuotaDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async tokenControllerUpdateTokenQuota(id: string, updateTokenQuotaDto: UpdateTokenQuotaDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TokenDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.tokenControllerUpdateTokenQuota(id, updateTokenQuotaDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TokenApi.tokenControllerUpdateTokenQuota']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TokenApi - factory interface
+ * @export
+ */
+export const TokenApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TokenApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateTokenDto} createTokenDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        tokenControllerCreateToken(createTokenDto: CreateTokenDto, options?: any): AxiosPromise<TokenDto> {
+            return localVarFp.tokenControllerCreateToken(createTokenDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        tokenControllerDeleteToken(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.tokenControllerDeleteToken(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        tokenControllerGetTokens(options?: any): AxiosPromise<Array<TokenDto>> {
+            return localVarFp.tokenControllerGetTokens(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {UpdateTokenQuotaDto} updateTokenQuotaDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        tokenControllerUpdateTokenQuota(id: string, updateTokenQuotaDto: UpdateTokenQuotaDto, options?: any): AxiosPromise<TokenDto> {
+            return localVarFp.tokenControllerUpdateTokenQuota(id, updateTokenQuotaDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TokenApi - object-oriented interface
+ * @export
+ * @class TokenApi
+ * @extends {BaseAPI}
+ */
+export class TokenApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateTokenDto} createTokenDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TokenApi
+     */
+    public tokenControllerCreateToken(createTokenDto: CreateTokenDto, options?: RawAxiosRequestConfig) {
+        return TokenApiFp(this.configuration).tokenControllerCreateToken(createTokenDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TokenApi
+     */
+    public tokenControllerDeleteToken(id: string, options?: RawAxiosRequestConfig) {
+        return TokenApiFp(this.configuration).tokenControllerDeleteToken(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TokenApi
+     */
+    public tokenControllerGetTokens(options?: RawAxiosRequestConfig) {
+        return TokenApiFp(this.configuration).tokenControllerGetTokens(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {UpdateTokenQuotaDto} updateTokenQuotaDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TokenApi
+     */
+    public tokenControllerUpdateTokenQuota(id: string, updateTokenQuotaDto: UpdateTokenQuotaDto, options?: RawAxiosRequestConfig) {
+        return TokenApiFp(this.configuration).tokenControllerUpdateTokenQuota(id, updateTokenQuotaDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

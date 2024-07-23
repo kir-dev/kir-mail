@@ -5,9 +5,11 @@ import { REDIS_HOST, REDIS_PORT } from '../config';
 import { AuthModule } from './auth/auth.module';
 import { GatewayController } from './gateway.controller';
 import { GatewayService } from './gateway.service';
+import { TokenModule } from './token/token.module';
 
 @Module({
   imports: [
+    TokenModule,
     AuthModule,
     BullModule.registerQueue({
       name: 'send',

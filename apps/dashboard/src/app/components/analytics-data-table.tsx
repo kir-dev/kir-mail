@@ -1,4 +1,5 @@
-import { AnalyticsData, AnalyticsDto } from '@kir-mail/api-generated';
+import { AnalyticsData } from '@kir-mail/api-generated';
+
 import { DataTable } from './data-table';
 import { StatusBadge } from './status-badge';
 
