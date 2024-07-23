@@ -1,6 +1,7 @@
 import { ResponsiveLine, Serie } from '@nivo/line';
 import { isSameHour, startOfHour, subHours } from 'date-fns';
 import { useMemo } from 'react';
+
 import { formatHu } from '../../utils/date';
 interface ChartProps {
   completed: number[];
@@ -68,12 +69,17 @@ export function Chart({ completed, failed }: ChartProps) {
         pointBorderWidth={2}
         pointBorderColor={{ from: 'serieColor' }}
         pointLabel='data.yFormatted'
-        pointLabelYOffset={-12}
-        crosshairType='x'
         enableTouchCrosshair
         useMesh
-        legends={[]}
         motionConfig='default'
+        tooltip={({ point }) => (
+          <div className='bg-white p-2 rounded-md shadow-md'>
+            <div className='text-sm font-semibold text-gray-800 capitalize'>{point.serieId}</div>
+            <div className='text-xs text-gray-600'>
+              {point.data.xFormatted} - {point.data.yFormatted}
+            </div>
+          </div>
+        )}
       />
     </div>
   );
