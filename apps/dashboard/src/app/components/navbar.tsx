@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+
 import { cn } from '../../utils/cn';
+import { Authenticator } from './authenticator';
 
 export function Header() {
   const [onTop, setOnTop] = useState(true);
@@ -25,6 +27,7 @@ export function Header() {
     >
       <div className='flex justify-between items-center container mx-auto'>
         <h1>Kir-Mail Dashboard</h1>
+        <Authenticator />
       </div>
     </header>
   );

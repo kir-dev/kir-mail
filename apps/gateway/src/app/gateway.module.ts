@@ -2,11 +2,13 @@ import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
 
 import { REDIS_HOST, REDIS_PORT } from '../config';
+import { AuthModule } from './auth/auth.module';
 import { GatewayController } from './gateway.controller';
 import { GatewayService } from './gateway.service';
 
 @Module({
   imports: [
+    AuthModule,
     BullModule.registerQueue({
       name: 'send',
       connection: {

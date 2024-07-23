@@ -20,3 +20,9 @@ export class SingleSendRequestDto {
   @IsString()
   html: string;
 }
+
+export class UserDto {
+  @ApiProperty({ example: 'Test User' })
+  @IsString()
+  displayName: string;
+}
