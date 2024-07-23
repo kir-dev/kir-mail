@@ -3,7 +3,7 @@ module.exports = {
   plugins: ['@nx', '@typescript-eslint/eslint-plugin', 'prettier', 'simple-import-sort'],
   overrides: [
     {
-      files: ['*.ts', '*.js'],
+      files: ['*.ts', '*.js', '*.tsx', '*.jsx'],
       rules: {
         '@nx/enforce-module-boundaries': [
           'error',
@@ -21,12 +21,12 @@ module.exports = {
       },
     },
     {
-      files: ['*.ts'],
+      files: ['*.ts', '*.tsx'],
       extends: ['plugin:@nx/typescript'],
       rules: {},
     },
     {
-      files: ['*.js'],
+      files: ['*.js', '*.jsx'],
       extends: ['plugin:@nx/javascript'],
       rules: {},
     },
