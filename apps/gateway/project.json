@@ -49,7 +49,7 @@
     },
     "docker-build": {
       "dependsOn": ["build"],
-      "command": "docker build -f apps/gateway/Dockerfile . -t ticketpond-gateway"
+      "command": "docker build -f apps/gateway/Dockerfile . -t kir-mail-gateway"
     }
   }
 }

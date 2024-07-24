@@ -49,7 +49,7 @@
     },
     "docker-build": {
       "dependsOn": ["build"],
-      "command": "docker build -f apps/microsoft-consumer/Dockerfile . -t ticketpond-microsoft-consumer"
+      "command": "docker build -f apps/microsoft-consumer/Dockerfile . -t kir-mail-microsoft-consumer"
     }
   }
 }
