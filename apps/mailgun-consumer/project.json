@@ -21,7 +21,8 @@
         "outputPath": "dist/apps/mailgun-consumer",
         "main": "apps/mailgun-consumer/src/main.ts",
         "tsConfig": "apps/mailgun-consumer/tsconfig.json",
-        "webpackConfig": "apps/mailgun-consumer/webpack.config.js"
+        "webpackConfig": "apps/mailgun-consumer/webpack.config.js",
+        "generatePackageJson": true
       },
       "configurations": {
         "development": {},

@@ -21,7 +21,8 @@
         "outputPath": "dist/apps/microsoft-consumer",
         "main": "apps/microsoft-consumer/src/main.ts",
         "tsConfig": "apps/microsoft-consumer/tsconfig.json",
-        "webpackConfig": "apps/microsoft-consumer/webpack.config.js"
+        "webpackConfig": "apps/microsoft-consumer/webpack.config.js",
+        "generatePackageJson": true
       },
       "configurations": {
         "development": {},
