@@ -1,4 +1,5 @@
 import { AnalyticsData } from '@kir-mail/api-generated';
+
 import { cn } from '../../utils/cn';
 
 interface StatusBadgeProps {
