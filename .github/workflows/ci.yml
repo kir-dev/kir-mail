@@ -61,3 +61,4 @@ jobs:
 
       - name: Logout from Docker Registry
         run: docker logout ${{ secrets.DOCKER_REGISTRY_URL }}
+
