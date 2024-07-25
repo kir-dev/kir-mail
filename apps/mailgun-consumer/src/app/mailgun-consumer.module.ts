@@ -1,6 +1,7 @@
 import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
 
+import { REDIS_HOST, REDIS_PORT } from '../config';
 import { MailgunConsumerService } from './mailgun-consumer.service';
 
 @Module({
@@ -8,8 +9,8 @@ import { MailgunConsumerService } from './mailgun-consumer.service';
     BullModule.registerQueue({
       name: 'send',
       connection: {
-        host: 'localhost',
-        port: 6379,
+        host: REDIS_HOST,
+        port: REDIS_PORT,
       },
     }),
   ],
