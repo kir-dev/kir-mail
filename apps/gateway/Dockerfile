@@ -14,4 +14,4 @@ RUN chown -R ${SERVICE_NAME}:${SERVICE_NAME} .
 RUN yarn install --production --frozen-lockfile
 RUN yarn prisma generate
 
-CMD ["node", "main.js"]
+CMD ["yarn", "prisma", "migrate", "deploy", "&&", "node", "main.js"]
