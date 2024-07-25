@@ -23,7 +23,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const [authenticated, setAuthenticated] = useState(false);
 
   const onLogin = async () => {
-    window.location.href = 'http://localhost:3000/api/auth/login';
+    window.location.href = `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`;
   };
 
   const onLogout = async () => {
