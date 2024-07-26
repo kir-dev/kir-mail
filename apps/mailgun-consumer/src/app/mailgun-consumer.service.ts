@@ -1,11 +1,14 @@
 import { SingleSendRequestDto } from '@kir-mail/types';
-import { OnQueueEvent, Processor, WorkerHost } from '@nestjs/bullmq';
+import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Injectable, Logger } from '@nestjs/common';
+import { MailerService } from '@nestjs-modules/mailer';
 import { Job, MetricsTime } from 'bullmq';
 
-const MESSAGES_PER_MONTH = 1_000_000;
+import { MAIL_USER } from '../config';
 
-const RESET_INTERVAL = 10 * 1000;
+const MESSAGES_PER_MONTH = 30_000;
+
+const RESET_INTERVAL = 30 * 24 * 60 * 60 * 1000;
 
 @Processor('send', {
   name: 'mailgun-consumer',
@@ -21,7 +24,23 @@ const RESET_INTERVAL = 10 * 1000;
 export class MailgunConsumerService extends WorkerHost {
   private readonly logger = new Logger(MailgunConsumerService.name);
 
+  constructor(private readonly mailerService: MailerService) {
+    super();
+  }
+
   async process(job: Job<SingleSendRequestDto>) {
-    this.logger.log(`Processing job: ${job.id} with data: ${JSON.stringify(job.data)}`);
+    this.logger.log(`Processing job #${job.id}`);
+    try {
+      await this.mailerService.sendMail({
+        to: job.data.to,
+        from: `"${job.data.from}" <noreply@${MAIL_USER.split('@')[1]}>`,
+        subject: job.data.subject,
+        html: job.data.html,
+      });
+    } catch (error) {
+      this.logger.error(`Job ${job.id} failed with error: ${error}`);
+      throw error;
+    }
+    this.logger.log(`Job #${job.id} processed`);
   }
 }
