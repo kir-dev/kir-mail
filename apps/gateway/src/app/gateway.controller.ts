@@ -1,5 +1,6 @@
 import { SingleSendRequestDto } from '@kir-mail/types';
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { RequestWithTokenUser } from '../types/request.types';
@@ -23,6 +24,7 @@ export class GatewayController {
   }
 
   @Get('data')
+  @UseGuards(AuthGuard('jwt'))
   @ApiResponse({ status: 200, description: 'Get data', type: AnalyticsDto })
   getData(): Promise<AnalyticsDto> {
     return this.gatewayService.getData();

@@ -13,7 +13,7 @@ export class GatewayService {
   async sendMessage(request: SingleSendRequestDto) {
     try {
       await this.sendQueue.add('send', request);
-      this.logger.debug(`Message queued for sending: ${request.subject}`);
+      this.logger.log(`Message queued for sending: ${request.subject}`);
     } catch (e) {
       throw new InternalServerErrorException(e.message);
     }
@@ -25,8 +25,11 @@ export class GatewayService {
 
     const completedJobs = this.mapJobsToDto(rawCompletedJobs, 'completed');
     const failedJobs = this.mapJobsToDto(rawFailedJobs, 'failed');
+
+    const sortedJobs = [...completedJobs, ...failedJobs].sort((a, b) => b.timestamp - a.timestamp);
+    const splitJobs = sortedJobs.slice(0, 100);
     return {
-      items: [...completedJobs, ...failedJobs],
+      items: splitJobs,
       completedTimestamps: this.mapJobsToTimestamps(rawCompletedJobs),
       failedTimestamps: this.mapJobsToTimestamps(rawFailedJobs),
     };

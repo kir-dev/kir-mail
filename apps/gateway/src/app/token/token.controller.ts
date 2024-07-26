@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreateTokenDto, TokenDto, UpdateTokenQuotaDto } from '../../types/token.types';
@@ -6,6 +7,7 @@ import { TokenService } from './token.service';
 
 @Controller('token')
 @ApiTags('token')
+@UseGuards(AuthGuard('jwt'))
 export class TokenController {
   constructor(private readonly tokenService: TokenService) {}
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { cn } from '../../utils/cn';
 import { Authenticator } from './authenticator';
@@ -27,7 +28,9 @@ export function Header() {
       })}
     >
       <div className='flex justify-between items-center container mx-auto'>
-        <h1>Kir-Mail Dashboard</h1>
+        <Link to='/'>
+          <h1>Kir-Mail Dashboard</h1>
+        </Link>
         <div className='flex items-center gap-5'>
           <Button variant='link' asChild className='p-0'>
             <a href='/token'>Tokens</a>

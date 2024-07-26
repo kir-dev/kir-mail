@@ -24,6 +24,7 @@
     "@nestjs/platform-express": "^10.0.2",
     "@nestjs/swagger": "^7.4.0",
     "@nivo/line": "^0.87.0",
+    "@nivo/pie": "^0.87.0",
     "@openapitools/openapi-generator-cli": "^2.13.4",
     "@prisma/client": "5.17.0",
     "@radix-ui/react-label": "^2.1.0",

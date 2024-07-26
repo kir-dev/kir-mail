@@ -6,14 +6,14 @@ import { Job, MetricsTime } from 'bullmq';
 
 import { MAIL_USER } from '../config';
 
-const MESSAGES_PER_MONTH = 1_000_000;
+const MESSAGES_PER_DAY = 50_000 * 30;
 
-const RESET_INTERVAL = 10 * 1000;
+const RESET_INTERVAL = 24 * 60 * 60 * 1000;
 
 @Processor('send', {
   name: 'microsoft-consumer',
   limiter: {
-    max: MESSAGES_PER_MONTH / ((30 * 24 * 60 * 60 * 1000) / RESET_INTERVAL),
+    max: MESSAGES_PER_DAY / ((30 * 24 * 60 * 60 * 1000) / RESET_INTERVAL),
     duration: RESET_INTERVAL,
   },
   metrics: {
@@ -29,13 +29,18 @@ export class MicrosoftConsumerService extends WorkerHost {
   }
 
   async process(job: Job<SingleSendRequestDto>) {
-    this.logger.log(`Processing job: ${job.id} with data: ${JSON.stringify(job.data)}`);
-    await this.mailerService.sendMail({
-      to: job.data.to,
-      from: `"${job.data.from}" <${MAIL_USER}>`,
-      subject: job.data.subject,
-      html: job.data.html,
-    });
-    this.logger.log(`Job ${job.id} processed`);
+    this.logger.log(`Processing job #${job.id}`);
+    try {
+      await this.mailerService.sendMail({
+        to: job.data.to,
+        from: `"${job.data.from}" <${MAIL_USER}>`,
+        subject: job.data.subject,
+        html: job.data.html,
+      });
+    } catch (error) {
+      this.logger.error(`Job ${job.id} failed with error: ${error}`);
+      throw error;
+    }
+    this.logger.log(`Job #${job.id} processed`);
   }
 }
