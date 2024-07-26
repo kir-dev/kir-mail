@@ -1,4 +1,4 @@
-import { SingleSendRequestDto } from '@kir-mail/types';
+import { SendRequestJobData, SingleSendRequestDto } from '@kir-mail/types';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { Job, Queue } from 'bullmq';
@@ -35,7 +35,7 @@ export class GatewayService {
     };
   }
 
-  private mapJobsToDto(jobs: Job<SingleSendRequestDto>[], status: string) {
+  private mapJobsToDto(jobs: Job<SendRequestJobData>[], status: string) {
     return jobs.map((job) => ({
       id: job.id,
       data: job.data,
@@ -44,7 +44,7 @@ export class GatewayService {
     }));
   }
 
-  private mapJobsToTimestamps(jobs: Job<SingleSendRequestDto>[]) {
+  private mapJobsToTimestamps(jobs: Job<SendRequestJobData>[]) {
     return jobs.map((job) => job.timestamp);
   }
 }

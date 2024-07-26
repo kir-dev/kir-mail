@@ -37,10 +37,10 @@ export interface AnalyticsData {
     'id': string;
     /**
      * 
-     * @type {SingleSendRequestDto}
+     * @type {SendRequestJobData}
      * @memberof AnalyticsData
      */
-    'data': SingleSendRequestDto;
+    'data': SendRequestJobData;
     /**
      * 
      * @type {string}
@@ -116,6 +116,43 @@ export interface ResponseDto {
      * @memberof ResponseDto
      */
     'message': string;
+}
+/**
+ * 
+ * @export
+ * @interface SendRequestJobData
+ */
+export interface SendRequestJobData {
+    /**
+     * 
+     * @type {string}
+     * @memberof SendRequestJobData
+     */
+    'from': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SendRequestJobData
+     */
+    'to': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SendRequestJobData
+     */
+    'subject': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SendRequestJobData
+     */
+    'html': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SendRequestJobData
+     */
+    'processedBy': string;
 }
 /**
  * 

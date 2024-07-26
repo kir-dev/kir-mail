@@ -1,4 +1,4 @@
-import { SingleSendRequestDto } from '@kir-mail/types';
+import { SendRequestJobData } from '@kir-mail/types';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ResponseDto {
@@ -13,8 +13,8 @@ export class AnalyticsData {
   @ApiProperty({ example: '1' })
   id: string;
 
-  @ApiProperty({ type: SingleSendRequestDto })
-  data: SingleSendRequestDto;
+  @ApiProperty({ type: SendRequestJobData })
+  data: SendRequestJobData;
 
   @ApiProperty({ example: 'completed' })
   status: string;

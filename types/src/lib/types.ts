@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, Length } from 'class-validator';
+import { IsEmail, IsOptional, IsString, Length } from 'class-validator';
 
 export class SingleSendRequestDto {
   @ApiProperty({ example: 'Kir-Dev' })
@@ -19,6 +19,13 @@ export class SingleSendRequestDto {
   @ApiProperty({ example: '<h1>Hello, World!</h1>' })
   @IsString()
   html: string;
+}
+
+export class SendRequestJobData extends SingleSendRequestDto {
+  @ApiProperty({ example: 'consumer' })
+  @IsString()
+  @IsOptional()
+  processedBy?: string;
 }
 
 export class UserDto {

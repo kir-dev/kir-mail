@@ -1,4 +1,4 @@
-import { SingleSendRequestDto } from '@kir-mail/types';
+import { SendRequestJobData } from '@kir-mail/types';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Injectable, Logger } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -10,8 +10,10 @@ const MESSAGES_PER_DAY = 50_000 * 30;
 
 const RESET_INTERVAL = 24 * 60 * 60 * 1000;
 
+const CONSUMER_NAME = 'microsoft-consumer';
+
 @Processor('send', {
-  name: 'microsoft-consumer',
+  name: CONSUMER_NAME,
   limiter: {
     max: MESSAGES_PER_DAY / ((30 * 24 * 60 * 60 * 1000) / RESET_INTERVAL),
     duration: RESET_INTERVAL,
@@ -28,7 +30,7 @@ export class MicrosoftConsumerService extends WorkerHost {
     super();
   }
 
-  async process(job: Job<SingleSendRequestDto>) {
+  async process(job: Job<SendRequestJobData>) {
     this.logger.log(`Processing job #${job.id}`);
     try {
       await this.mailerService.sendMail({
@@ -41,6 +43,7 @@ export class MicrosoftConsumerService extends WorkerHost {
       this.logger.error(`Job ${job.id} failed with error: ${error}`);
       throw error;
     }
-    this.logger.log(`Job #${job.id} processed`);
+    await job.updateData({ ...job.data, processedBy: CONSUMER_NAME });
+    this.logger.log(`Job #${job.id} processed by ${CONSUMER_NAME}`);
   }
 }
