@@ -34,7 +34,6 @@ export class MicrosoftConsumerService extends WorkerHost {
     this.logger.log(`Processing job #${job.id} by ${CONSUMER_NAME}`);
     await job.updateData({ ...job.data, processedBy: CONSUMER_NAME });
 
-    await new Promise((resolve) => setTimeout(resolve, 10000));
     try {
       if (!DISABLE_EMAILS)
         await this.mailerService.sendMail({
