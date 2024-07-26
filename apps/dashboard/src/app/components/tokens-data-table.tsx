@@ -6,6 +6,7 @@ import { useDeleteToken } from '../../hooks/use-delete-token';
 import { Button } from './button';
 import { DataTable } from './data-table';
 import { QuotaDisplay } from './quota-display';
+import { SecretDisplay } from './secret-display';
 
 interface TokensDataTableProps {
   data: TokenDto[];
@@ -22,6 +23,7 @@ export function TokensDataTable({ data }: TokensDataTableProps) {
         {
           accessorKey: 'value',
           header: 'Key',
+          cell: ({ row }) => <SecretDisplay secret={row.original.value} />,
         },
         {
           header: 'Usage',
