@@ -4,8 +4,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Job, MetricsTime } from 'bullmq';
 
-import { DISABLE_EMAILS } from '../../../mailgun-consumer/src/config';
-import { MAIL_USER } from '../config';
+import { DISABLE_EMAILS, MAIL_USER } from '../config';
 
 const MESSAGES_PER_DAY = 50_000 * 30;
 
