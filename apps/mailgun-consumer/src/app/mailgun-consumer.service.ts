@@ -4,7 +4,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Job, MetricsTime } from 'bullmq';
 
-import { MAIL_USER } from '../config';
+import { DISABLE_EMAILS, MAIL_USER } from '../config';
 
 const MESSAGES_PER_MONTH = 30_000;
 
@@ -31,14 +31,17 @@ export class MailgunConsumerService extends WorkerHost {
   }
 
   async process(job: Job<SendRequestJobData>) {
-    this.logger.log(`Processing job #${job.id}`);
+    this.logger.log(`Processing job #${job.id} by ${CONSUMER_NAME}`);
+    await job.updateData({ ...job.data, processedBy: CONSUMER_NAME });
+    await new Promise((resolve) => setTimeout(resolve, 10000));
     try {
-      await this.mailerService.sendMail({
-        to: job.data.to,
-        from: `"${job.data.from}" <noreply@${MAIL_USER.split('@')[1]}>`,
-        subject: job.data.subject,
-        html: job.data.html,
-      });
+      if (!DISABLE_EMAILS)
+        await this.mailerService.sendMail({
+          to: job.data.to,
+          from: `"${job.data.from}" <noreply@${MAIL_USER.split('@')[1]}>`,
+          subject: job.data.subject,
+          html: job.data.html,
+        });
     } catch (error) {
       this.logger.error(`Job ${job.id} failed with error: ${error}`);
       throw error;

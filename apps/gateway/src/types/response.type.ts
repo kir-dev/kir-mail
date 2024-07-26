@@ -1,5 +1,6 @@
 import { SendRequestJobData } from '@kir-mail/types';
 import { ApiProperty } from '@nestjs/swagger';
+import { JobType } from 'bullmq';
 
 export class ResponseDto {
   @ApiProperty({ example: 200 })
@@ -16,20 +17,65 @@ export class AnalyticsData {
   @ApiProperty({ type: SendRequestJobData })
   data: SendRequestJobData;
 
-  @ApiProperty({ example: 'completed' })
-  status: string;
+  @ApiProperty({
+    example: 'completed',
+    enum: [
+      'completed',
+      'failed',
+      'active',
+      'delayed',
+      'waiting',
+      'waiting-children',
+      'prioritized',
+      'paused',
+      'repeat',
+      'wait',
+    ],
+  })
+  status: JobType;
 
   @ApiProperty({ example: Date.now() })
   timestamp: number;
+}
+
+export class TimestampsDto {
+  @ApiProperty({ type: [Number] })
+  completed: number[];
+
+  @ApiProperty({ type: [Number] })
+  failed: number[];
+
+  @ApiProperty({ type: [Number] })
+  active: number[];
+
+  @ApiProperty({ type: [Number] })
+  delayed: number[];
+
+  @ApiProperty({ type: [Number] })
+  waiting: number[];
+
+  @ApiProperty({ type: [Number] })
+  'waiting-children': number[];
+
+  @ApiProperty({ type: [Number] })
+  prioritized: number[];
+
+  @ApiProperty({ type: [Number] })
+  paused: number[];
+
+  @ApiProperty({ type: [Number] })
+  repeat: number[];
+
+  @ApiProperty({ type: [Number] })
+  wait: number[];
 }
 
 export class AnalyticsDto {
   @ApiProperty({ type: [AnalyticsData] })
   items: AnalyticsData[];
 
-  @ApiProperty({ type: [Number] })
-  completedTimestamps: number[];
-
-  @ApiProperty({ type: [Number] })
-  failedTimestamps: number[];
+  @ApiProperty({
+    type: TimestampsDto,
+  })
+  timestamps: TimestampsDto;
 }

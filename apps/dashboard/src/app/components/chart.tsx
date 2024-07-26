@@ -1,50 +1,33 @@
+import { TimestampsDto } from '@kir-mail/api-generated';
 import { ResponsiveLine, Serie } from '@nivo/line';
 import { ResponsivePie } from '@nivo/pie';
+import { JobType } from 'bullmq';
 import { isSameHour, startOfHour, subHours } from 'date-fns';
 import { useMemo } from 'react';
 
 import { formatHu } from '../../utils/date';
 interface ChartProps {
-  completed: number[];
-  failed: number[];
+  data: TimestampsDto;
 }
 
-export function Chart({ completed, failed }: ChartProps) {
+export function Chart({ data }: ChartProps) {
   const lineData = useMemo<Serie[]>(() => {
-    const completedData = getSerieDataFromTimestamps(completed);
-    const failedData = getSerieDataFromTimestamps(failed);
-
-    return [
-      {
-        id: 'completed',
-        data: completedData,
-      },
-      {
-        id: 'failed',
-        data: failedData,
-      },
-    ];
-  }, [completed, failed]);
+    return Object.entries(data).map(([id, data]) => ({
+      id,
+      data: getSerieDataFromTimestamps(data),
+    }));
+  }, [data]);
 
   const pieData = useMemo(() => {
-    const completedCount = completed.length;
-    const failedCount = failed.length;
-
-    return [
-      {
-        id: 'completed',
-        label: 'Teljesített',
-        value: completedCount,
-        color: '#86efac',
-      },
-      {
-        id: 'failed',
-        label: 'Sikertelen',
-        value: failedCount,
-        color: '#fca5a5',
-      },
-    ];
-  }, [completed, failed]);
+    return Object.entries(data)
+      .map(([id, data]) => ({
+        id,
+        label: JobTypeChartMap[id as JobType].label,
+        value: data.length,
+        color: JobTypeChartMap[id as JobType].color,
+      }))
+      .filter((d) => d.value > 0);
+  }, [data]);
 
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
@@ -55,35 +38,28 @@ export function Chart({ completed, failed }: ChartProps) {
           xScale={{ type: 'point' }}
           yScale={{
             type: 'linear',
-            min: 'auto',
+            min: 0,
             max: 'auto',
-            stacked: true,
+            stacked: false,
             reverse: false,
           }}
-          yFormat=' >-.2f'
           curve='monotoneX'
           axisTop={null}
           axisRight={null}
-          axisBottom={{
-            tickSize: 5,
-          }}
           axisLeft={null}
           enableGridX={false}
           enableGridY={false}
-          colors={(serie) => (serie.id === 'completed' ? '#86efac' : '#fca5a5')}
+          colors={(serie) => JobTypeChartMap[serie.id as JobType].color}
           lineWidth={4}
           enablePoints={false}
-          pointSize={10}
-          pointColor={{ theme: 'background' }}
-          pointBorderWidth={2}
-          pointBorderColor={{ from: 'serieColor' }}
-          pointLabel='data.yFormatted'
           enableTouchCrosshair
           useMesh
           motionConfig='default'
           tooltip={({ point }) => (
             <div className='bg-white p-2 rounded-md shadow-md'>
-              <div className='text-sm font-semibold text-gray-800 capitalize'>{point.serieId}</div>
+              <div className='text-sm font-semibold text-gray-800 capitalize'>
+                {JobTypeChartMap[point.serieId as JobType].label}
+              </div>
               <div className='text-xs text-gray-600'>
                 {point.data.xFormatted} - {point.data.yFormatted}
               </div>
@@ -106,7 +82,9 @@ export function Chart({ completed, failed }: ChartProps) {
           arcLabelsTextColor={{ from: 'color', modifiers: [['darker', 1]] }}
           tooltip={({ datum }) => (
             <div className='bg-white p-2 rounded-md shadow-md'>
-              <div className='text-sm font-semibold text-gray-800 capitalize'>{datum.label}</div>
+              <div className='text-sm font-semibold text-gray-800 capitalize'>
+                {JobTypeChartMap[datum.id as JobType].label}
+              </div>
               <div className='text-xs text-gray-600'>{datum.value}</div>
             </div>
           )}
@@ -123,3 +101,16 @@ function getSerieDataFromTimestamps(timestamps: number[]) {
     return { x: formatHu(date, 'HH:mm'), y: value };
   });
 }
+
+const JobTypeChartMap: Record<JobType, { label: string; color: string }> = {
+  active: { label: 'Aktív', color: '#93c5fd' },
+  completed: { label: 'Kész', color: '#86efac' },
+  failed: { label: 'Sikertelen', color: '#fca5a5' },
+  prioritized: { label: 'Priorizált', color: '#d8b4fe' },
+  repeat: { label: 'Ismételt', color: '#fde047' },
+  delayed: { label: 'Késleltetett', color: '#fde047' },
+  paused: { label: 'Szüneteltetve', color: '#cbd5e1' },
+  'waiting-children': { label: 'Alfeladatra vár', color: '#cbd5e1' },
+  wait: { label: 'Várakozás', color: '#cbd5e1' },
+  waiting: { label: 'Várakozik', color: '#cbd5e1' },
+};

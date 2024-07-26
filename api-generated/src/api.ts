@@ -46,7 +46,7 @@ export interface AnalyticsData {
      * @type {string}
      * @memberof AnalyticsData
      */
-    'status': string;
+    'status': AnalyticsDataStatusEnum;
     /**
      * 
      * @type {number}
@@ -54,6 +54,22 @@ export interface AnalyticsData {
      */
     'timestamp': number;
 }
+
+export const AnalyticsDataStatusEnum = {
+    Completed: 'completed',
+    Failed: 'failed',
+    Active: 'active',
+    Delayed: 'delayed',
+    Waiting: 'waiting',
+    WaitingChildren: 'waiting-children',
+    Prioritized: 'prioritized',
+    Paused: 'paused',
+    Repeat: 'repeat',
+    Wait: 'wait'
+} as const;
+
+export type AnalyticsDataStatusEnum = typeof AnalyticsDataStatusEnum[keyof typeof AnalyticsDataStatusEnum];
+
 /**
  * 
  * @export
@@ -68,16 +84,10 @@ export interface AnalyticsDto {
     'items': Array<AnalyticsData>;
     /**
      * 
-     * @type {Array<number>}
+     * @type {TimestampsDto}
      * @memberof AnalyticsDto
      */
-    'completedTimestamps': Array<number>;
-    /**
-     * 
-     * @type {Array<number>}
-     * @memberof AnalyticsDto
-     */
-    'failedTimestamps': Array<number>;
+    'timestamps': TimestampsDto;
 }
 /**
  * 
@@ -184,6 +194,73 @@ export interface SingleSendRequestDto {
      * @memberof SingleSendRequestDto
      */
     'html': string;
+}
+/**
+ * 
+ * @export
+ * @interface TimestampsDto
+ */
+export interface TimestampsDto {
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof TimestampsDto
+     */
+    'completed': Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof TimestampsDto
+     */
+    'failed': Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof TimestampsDto
+     */
+    'active': Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof TimestampsDto
+     */
+    'delayed': Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof TimestampsDto
+     */
+    'waiting': Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof TimestampsDto
+     */
+    'waiting-children': Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof TimestampsDto
+     */
+    'prioritized': Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof TimestampsDto
+     */
+    'paused': Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof TimestampsDto
+     */
+    'repeat': Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof TimestampsDto
+     */
+    'wait': Array<number>;
 }
 /**
  * 

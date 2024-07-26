@@ -8,10 +8,7 @@ export function DashboardPage() {
   return (
     <main className='space-y-5'>
       <h2>Dashboard</h2>
-      <Chart
-        completed={analyticsData.data?.completedTimestamps ?? []}
-        failed={analyticsData.data?.failedTimestamps ?? []}
-      />
+      {analyticsData.data?.timestamps && <Chart data={analyticsData.data.timestamps} />}
       <AnalyticsDataTable data={analyticsData.data?.items ?? []} />
     </main>
   );

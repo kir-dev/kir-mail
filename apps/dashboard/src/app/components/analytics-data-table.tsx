@@ -1,5 +1,6 @@
 import { AnalyticsData } from '@kir-mail/api-generated';
 
+import { formatHu } from '../../utils/date';
 import { DataTable } from './data-table';
 import { StatusBadge } from './status-badge';
 
@@ -14,7 +15,7 @@ export function AnalyticsDataTable({ data }: AnalyticsDataTableProps) {
         {
           accessorKey: 'date',
           header: 'Dátum',
-          cell: ({ row }) => <span>{new Date(row.original.timestamp).toLocaleDateString()}</span>,
+          cell: ({ row }) => <>{formatHu(row.original.timestamp, 'MM. dd. • HH:mm')}</>,
         },
         {
           accessorKey: 'data.from',

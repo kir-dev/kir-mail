@@ -1,9 +1,9 @@
 import { SendRequestJobData, SingleSendRequestDto } from '@kir-mail/types';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
-import { Job, Queue } from 'bullmq';
+import { Job, JobType, Queue } from 'bullmq';
 
-import { AnalyticsDto } from '../types/response.type';
+import { AnalyticsData, AnalyticsDto, TimestampsDto } from '../types/response.type';
 
 @Injectable()
 export class GatewayService {
@@ -20,22 +20,40 @@ export class GatewayService {
   }
 
   async getData(): Promise<AnalyticsDto> {
-    const rawCompletedJobs = await this.sendQueue.getJobs(['completed']);
-    const rawFailedJobs = await this.sendQueue.getJobs(['failed']);
+    const types: JobType[] = [
+      'completed',
+      'failed',
+      'active',
+      'delayed',
+      'waiting',
+      'waiting-children',
+      'prioritized',
+      'paused',
+      'repeat',
+    ];
 
-    const completedJobs = this.mapJobsToDto(rawCompletedJobs, 'completed');
-    const failedJobs = this.mapJobsToDto(rawFailedJobs, 'failed');
+    const jobs: AnalyticsData[] = [];
 
-    const sortedJobs = [...completedJobs, ...failedJobs].sort((a, b) => b.timestamp - a.timestamp);
-    const splitJobs = sortedJobs.slice(0, 100);
+    for (const type of types) {
+      const rawJobs = await this.sendQueue.getJobs([type]);
+      jobs.push(...this.mapJobsToDto(rawJobs, type));
+    }
+
+    const sortedJobs = jobs.sort((a, b) => b.timestamp - a.timestamp);
+    const splitJobs = sortedJobs.filter((job) => job.timestamp > Date.now() - 24 * 60 * 60 * 1000);
+
+    const timestamps = types.reduce<TimestampsDto>((acc, type) => {
+      acc[type] = this.mapJobsToTimestamps(splitJobs, type);
+      return acc;
+    }, new TimestampsDto());
+
     return {
       items: splitJobs,
-      completedTimestamps: this.mapJobsToTimestamps(rawCompletedJobs),
-      failedTimestamps: this.mapJobsToTimestamps(rawFailedJobs),
+      timestamps: timestamps,
     };
   }
 
-  private mapJobsToDto(jobs: Job<SendRequestJobData>[], status: string) {
+  private mapJobsToDto(jobs: Job<SendRequestJobData>[], status: JobType): AnalyticsData[] {
     return jobs.map((job) => ({
       id: job.id,
       data: job.data,
@@ -44,7 +62,7 @@ export class GatewayService {
     }));
   }
 
-  private mapJobsToTimestamps(jobs: Job<SendRequestJobData>[]) {
-    return jobs.map((job) => job.timestamp);
+  private mapJobsToTimestamps(jobs: AnalyticsData[], status: JobType) {
+    return jobs.filter((job) => job.status === status).map((job) => job.timestamp);
   }
 }

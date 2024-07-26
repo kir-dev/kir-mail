@@ -12,5 +12,6 @@ export function useAnalyticsData() {
       const response = await gatewayApi.gatewayControllerGetData();
       return response.data;
     },
+    refetchInterval: 5000,
   });
 }

@@ -4,6 +4,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Job, MetricsTime } from 'bullmq';
 
+import { DISABLE_EMAILS } from '../../../mailgun-consumer/src/config';
 import { MAIL_USER } from '../config';
 
 const MESSAGES_PER_DAY = 50_000 * 30;
@@ -31,19 +32,22 @@ export class MicrosoftConsumerService extends WorkerHost {
   }
 
   async process(job: Job<SendRequestJobData>) {
-    this.logger.log(`Processing job #${job.id}`);
+    this.logger.log(`Processing job #${job.id} by ${CONSUMER_NAME}`);
+    await job.updateData({ ...job.data, processedBy: CONSUMER_NAME });
+
+    await new Promise((resolve) => setTimeout(resolve, 10000));
     try {
-      await this.mailerService.sendMail({
-        to: job.data.to,
-        from: `"${job.data.from}" <${MAIL_USER}>`,
-        subject: job.data.subject,
-        html: job.data.html,
-      });
+      if (!DISABLE_EMAILS)
+        await this.mailerService.sendMail({
+          to: job.data.to,
+          from: `"${job.data.from}" <${MAIL_USER}>`,
+          subject: job.data.subject,
+          html: job.data.html,
+        });
     } catch (error) {
       this.logger.error(`Job ${job.id} failed with error: ${error}`);
       throw error;
     }
-    await job.updateData({ ...job.data, processedBy: CONSUMER_NAME });
     this.logger.log(`Job #${job.id} processed by ${CONSUMER_NAME}`);
   }
 }

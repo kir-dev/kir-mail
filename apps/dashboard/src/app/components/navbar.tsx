@@ -24,7 +24,7 @@ export function Header() {
   return (
     <header
       className={cn('sticky top-0 z-10 transition-colors p-5', {
-        'border-b bg-white shadow-sm dark:bg-slate-900 dark:shadow-slate-950 dark:border-0': !onTop,
+        'border-b bg-white shadow-sm': !onTop,
       })}
     >
       <div className='flex justify-between items-center container mx-auto'>
