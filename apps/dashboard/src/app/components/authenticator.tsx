@@ -11,7 +11,7 @@ export function Authenticator() {
       <div className='flex items-center gap-2'>
         <p>{me.data?.displayName}</p>
         <Button variant='outline' onClick={logout}>
-          Logout
+          Kijelentkezés
         </Button>
       </div>
     );
@@ -19,7 +19,7 @@ export function Authenticator() {
 
   return (
     <Button variant='outline' onClick={login}>
-      Login
+      Bejelentkezés
     </Button>
   );
 }

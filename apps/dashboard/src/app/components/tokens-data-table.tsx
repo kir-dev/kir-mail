@@ -18,19 +18,19 @@ export function TokensDataTable({ data }: TokensDataTableProps) {
       columns={[
         {
           accessorKey: 'name',
-          header: 'Name',
+          header: 'Név',
         },
         {
           accessorKey: 'value',
-          header: 'Key',
+          header: 'Token',
           cell: ({ row }) => <SecretDisplay secret={row.original.value} />,
         },
         {
-          header: 'Usage',
+          header: 'Kvóta',
           cell: ({ row }) => <QuotaDisplay token={row.original} />,
         },
         {
-          header: 'Actions',
+          header: 'Műveletek',
           cell: ({ row }) => <DeleteToken id={row.original.id} />,
         },
       ]}

@@ -33,13 +33,13 @@ export function Chart({ completed, failed }: ChartProps) {
     return [
       {
         id: 'completed',
-        label: 'completed',
+        label: 'Teljesített',
         value: completedCount,
         color: '#86efac',
       },
       {
         id: 'failed',
-        label: 'failed',
+        label: 'Sikertelen',
         value: failedCount,
         color: '#fca5a5',
       },

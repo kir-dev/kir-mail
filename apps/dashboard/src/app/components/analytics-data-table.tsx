@@ -13,22 +13,22 @@ export function AnalyticsDataTable({ data }: AnalyticsDataTableProps) {
       columns={[
         {
           accessorKey: 'date',
-          header: 'Date',
+          header: 'Dátum',
           cell: ({ row }) => <span>{new Date(row.original.timestamp).toLocaleDateString()}</span>,
         },
         {
           accessorKey: 'data.from',
-          header: 'From',
+          header: 'Küldő',
         },
         {
           accessorKey: 'data.to',
-          header: 'To',
+          header: 'Címzett',
         },
         {
           accessorKey: 'data.subject',
-          header: 'Subject',
+          header: 'Tárgy',
         },
-        { accessorKey: 'status', header: 'Status', cell: ({ row }) => <StatusBadge status={row.original.status} /> },
+        { accessorKey: 'status', header: 'Státusz', cell: ({ row }) => <StatusBadge status={row.original.status} /> },
       ]}
       data={data}
     />

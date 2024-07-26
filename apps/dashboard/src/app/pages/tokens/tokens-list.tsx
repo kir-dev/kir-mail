@@ -9,9 +9,9 @@ export function TokensList() {
   return (
     <main className='space-y-5'>
       <div className='flex items-center justify-between'>
-        <h2>Tokens</h2>
+        <h2>Tokenek</h2>
         <LinkButton href='/token/new'>
-          <TbPlus /> Create Token
+          <TbPlus /> Új token
         </LinkButton>
       </div>
       <TokensDataTable data={tokens.data ?? []} />
