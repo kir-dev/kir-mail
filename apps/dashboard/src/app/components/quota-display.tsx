@@ -1,13 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TokenDto } from '@kir-mail/api-generated';
-import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { TbCheck, TbPencilPlus, TbX } from 'react-icons/tb';
+import { TbCheck, TbLoader, TbPencilPlus, TbX } from 'react-icons/tb';
 import { z } from 'zod';
 
 import { useUpdateTokenQuota } from '../../hooks/use-update-token-quota';
 import { cn } from '../../utils/cn';
+import { Button } from './button';
 import { Input } from './input';
 
 interface QuotaDisplayProps {
@@ -24,7 +24,6 @@ const QuotaFormSchema = z.object({
 export function QuotaDisplay({ token }: QuotaDisplayProps) {
   const [isEditing, setIsEditing] = useState(false);
 
-  const queryClient = useQueryClient();
   const updateTokenQuota = useUpdateTokenQuota(token.id);
 
   const form = useForm<z.infer<typeof QuotaFormSchema>>({
@@ -39,7 +38,6 @@ export function QuotaDisplay({ token }: QuotaDisplayProps) {
 
   const onSubmit = form.handleSubmit(async (data) => {
     await updateTokenQuota.mutateAsync(data.quota);
-    queryClient.invalidateQueries({ queryKey: ['tokens'] });
     setIsEditing(false);
   });
 
@@ -60,20 +58,18 @@ export function QuotaDisplay({ token }: QuotaDisplayProps) {
       {isEditing ? (
         <form onSubmit={onSubmit} className='flex items-center mt-2 gap-1'>
           <Input type='number' className='w-24 px-1 h-5' {...form.register('quota')} />
-          <button type='submit' className='hover:bg-slate-200 rounded-full cursor-pointer p-1'>
+          <Button variant='ghost' size='inline' type='submit'>
             <TbCheck size={15} />
-          </button>
-          <button className='hover:bg-slate-200 rounded-full cursor-pointer p-1' onClick={onReset}>
+          </Button>
+          <Button variant='ghost' size='inline' onClick={onReset}>
             <TbX size={15} />
-          </button>
+          </Button>
         </form>
       ) : (
-        <button
-          onClick={() => setIsEditing(true)}
-          className='mt-2 hover:bg-slate-200 rounded-full cursor-pointer py-0.5 px-2'
-        >
-          {token.used} / {token.quota} <TbPencilPlus size={15} className='inline' />
-        </button>
+        <Button variant='ghost' size='inline' className='mt-1' onClick={() => setIsEditing(true)}>
+          {token.used} / {token.quota} <TbPencilPlus size={15} className='inline' />{' '}
+          {updateTokenQuota.isPending && <TbLoader className='animate-spin' />}
+        </Button>
       )}
     </div>
   );
