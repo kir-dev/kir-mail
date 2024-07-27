@@ -56,8 +56,7 @@ jobs:
           docker buildx create --use
           docker buildx inspect --bootstrap
           docker buildx build --platform linux/amd64 --push -t ${{ secrets.DOCKER_REPOSITORY_BASE_URL }}/kir-mail-gateway:latest -f apps/gateway/Dockerfile .
-          docker buildx build --platform linux/amd64 --push -t ${{ secrets.DOCKER_REPOSITORY_BASE_URL }}/kir-mail-microsoft-consumer:latest -f apps/microsoft-consumer/Dockerfile .
-          docker buildx build --platform linux/amd64 --push -t ${{ secrets.DOCKER_REPOSITORY_BASE_URL }}/kir-mail-mailgun-consumer:latest -f apps/mailgun-consumer/Dockerfile .
+          docker buildx build --platform linux/amd64 --push -t ${{ secrets.DOCKER_REPOSITORY_BASE_URL }}/kir-mail-consumer:latest -f apps/consumer/Dockerfile .
 
       - name: Logout from Docker Registry
         run: docker logout ${{ secrets.DOCKER_REGISTRY_URL }}

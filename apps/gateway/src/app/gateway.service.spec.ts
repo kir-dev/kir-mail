@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 
 import { GatewayService } from './gateway.service';
 
-describe('MailgunConsumerService', () => {
+describe('ConsumerService', () => {
   let service: GatewayService;
 
   beforeAll(async () => {

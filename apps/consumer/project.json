@@ -1,5 +1,5 @@
 {
-  "name": "microsoft-consumer",
+  "name": "consumer",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/kir-mail/src",
   "projectType": "application",
@@ -8,7 +8,7 @@
     "test": {
       "executor": "@nrwl/jest:jest",
       "options": {
-        "jestConfig": "apps/microsoft-consumer/jest.config.ts"
+        "jestConfig": "apps/consumer/jest.config.ts"
       }
     },
     "build": {
@@ -18,10 +18,10 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
-        "outputPath": "dist/apps/microsoft-consumer",
-        "main": "apps/microsoft-consumer/src/main.ts",
-        "tsConfig": "apps/microsoft-consumer/tsconfig.json",
-        "webpackConfig": "apps/microsoft-consumer/webpack.config.js",
+        "outputPath": "dist/apps/consumer",
+        "main": "apps/consumer/src/main.ts",
+        "tsConfig": "apps/consumer/tsconfig.json",
+        "webpackConfig": "apps/consumer/webpack.config.js",
         "generatePackageJson": true
       },
       "configurations": {
@@ -33,14 +33,14 @@
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "microsoft-consumer:build"
+        "buildTarget": "consumer:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "microsoft-consumer:build:development"
+          "buildTarget": "consumer:build:development"
         },
         "production": {
-          "buildTarget": "microsoft-consumer:build:production"
+          "buildTarget": "consumer:build:production"
         }
       }
     },
@@ -50,7 +50,7 @@
     },
     "docker-build": {
       "dependsOn": ["build"],
-      "command": "docker build -f apps/microsoft-consumer/Dockerfile . -t kir-mail-microsoft-consumer"
+      "command": "docker build -f apps/consumer/Dockerfile . -t kir-mail-consumer"
     }
   }
 }

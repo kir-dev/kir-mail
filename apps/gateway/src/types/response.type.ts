@@ -36,6 +36,9 @@ export class AnalyticsData {
 
   @ApiProperty({ example: Date.now() })
   timestamp: number;
+
+  @ApiProperty({ example: 'send' })
+  queue: string;
 }
 
 export class TimestampsDto {

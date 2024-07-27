@@ -33,8 +33,7 @@
       "plugin": "@nx/jest/plugin",
       "options": {
         "targetName": "test"
-      },
-      "exclude": ["apps/mailgun-consumer-e2e/**/*", "apps/microsoft-consumer-e2e/**/*"]
+      }
     },
     {
       "plugin": "@nx/vite/plugin",

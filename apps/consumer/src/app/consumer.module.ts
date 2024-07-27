@@ -1,19 +1,18 @@
-import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
 
-import { MAIL_HOST, MAIL_PASS, MAIL_PORT, MAIL_USER, REDIS_HOST, REDIS_PORT } from '../config';
-import { MailgunConsumerService } from './mailgun-consumer.service';
+import { MAIL_HOST, MAIL_PASS, MAIL_PORT, MAIL_USER } from '../config';
+import { ConsumerService } from './consumer.service';
 
 @Module({
   imports: [
-    BullModule.registerQueue({
-      name: 'send',
-      connection: {
-        host: REDIS_HOST,
-        port: REDIS_PORT,
-      },
-    }),
+    // BullModule.registerQueue({
+    //   name: 'send',
+    //   connection: {
+    //     host: REDIS_HOST,
+    //     port: REDIS_PORT,
+    //   },
+    // }),
     MailerModule.forRoot({
       transport: {
         host: MAIL_HOST,
@@ -30,6 +29,6 @@ import { MailgunConsumerService } from './mailgun-consumer.service';
     }),
   ],
   controllers: [],
-  providers: [MailgunConsumerService],
+  providers: [ConsumerService],
 })
-export class MailgunConsumerModule {}
+export class ConsumerModule {}

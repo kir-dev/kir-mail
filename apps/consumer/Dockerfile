@@ -1,6 +1,6 @@
 FROM docker.io/node:lts-alpine
 
-ARG SERVICE_NAME=mailgun-consumer
+ARG SERVICE_NAME=consumer
 
 WORKDIR /apps/${SERVICE_NAME}
 

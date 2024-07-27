@@ -1,21 +1,50 @@
 import { SendRequestJobData, SingleSendRequestDto } from '@kir-mail/types';
-import { InjectQueue } from '@nestjs/bullmq';
-import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { Job, JobType, Queue } from 'bullmq';
 
+import { QUEUE_IDS, REDIS_HOST, REDIS_PORT } from '../config';
 import { AnalyticsData, AnalyticsDto, TimestampsDto } from '../types/response.type';
+
+const DEFAULT_QUEUE = 'send';
 
 @Injectable()
 export class GatewayService {
   private readonly logger = new Logger(GatewayService.name);
-  constructor(@InjectQueue('send') private sendQueue: Queue) {}
+  private readonly directQueues: Queue[] = [];
+  constructor() {
+    this.createQueue(DEFAULT_QUEUE);
+    QUEUE_IDS.forEach((queueId) => this.createQueue(queueId));
+  }
+
+  private createQueue(name: string) {
+    this.logger.log(`Creating queue: ${name}`);
+    const queue = new Queue(name, {
+      connection: {
+        host: REDIS_HOST,
+        port: REDIS_PORT,
+      },
+      defaultJobOptions: {
+        attempts: 5,
+        backoff: {
+          type: 'exponential',
+          delay: 5000,
+        },
+      },
+    });
+    this.directQueues.push(queue);
+  }
 
   async sendMessage(request: SingleSendRequestDto) {
+    const queue = this.getQueueForRequest(request);
+    if (!queue) {
+      throw new NotFoundException('Direct queue not found');
+    }
+
     try {
-      await this.sendQueue.add('send', request);
-      this.logger.log(`Message queued for sending: ${request.subject}`);
-    } catch (e) {
-      throw new InternalServerErrorException(e.message);
+      await queue.add('send', request);
+    } catch (error) {
+      this.logger.error(`Failed to add job to queue: ${error}`);
+      throw new InternalServerErrorException('Failed to add job to queue');
     }
   }
 
@@ -35,7 +64,10 @@ export class GatewayService {
     const jobs: AnalyticsData[] = [];
 
     for (const type of types) {
-      const rawJobs = await this.sendQueue.getJobs([type]);
+      let rawJobs: Job<SendRequestJobData>[] = [];
+      for (const queue of this.directQueues) {
+        rawJobs = await queue.getJobs(type);
+      }
       jobs.push(...this.mapJobsToDto(rawJobs, type));
     }
 
@@ -53,12 +85,24 @@ export class GatewayService {
     };
   }
 
+  private getQueueForRequest(request: SingleSendRequestDto): Queue | undefined {
+    if (request.directQueue) {
+      return this.directQueues.find((queue) => queue.name === request.directQueue);
+    }
+    return this.getDefaultQueue();
+  }
+
+  private getDefaultQueue(): Queue {
+    return this.directQueues.find((queue) => queue.name === DEFAULT_QUEUE);
+  }
+
   private mapJobsToDto(jobs: Job<SendRequestJobData>[], status: JobType): AnalyticsData[] {
     return jobs.map((job) => ({
       id: job.id,
       data: job.data,
       status: status,
       timestamp: job.timestamp,
+      queue: job.queueName,
     }));
   }
 
