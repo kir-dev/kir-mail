@@ -37,10 +37,10 @@ export interface AnalyticsData {
     'id': string;
     /**
      * 
-     * @type {SendRequestJobData}
+     * @type {SingleSendRequestDto}
      * @memberof AnalyticsData
      */
-    'data': SendRequestJobData;
+    'data': SingleSendRequestDto;
     /**
      * 
      * @type {string}
@@ -59,6 +59,12 @@ export interface AnalyticsData {
      * @memberof AnalyticsData
      */
     'queue': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsData
+     */
+    'processedBy': string;
 }
 
 export const AnalyticsDataStatusEnum = {
@@ -142,55 +148,6 @@ export interface ResponseDto {
 /**
  * 
  * @export
- * @interface SendRequestJobData
- */
-export interface SendRequestJobData {
-    /**
-     * 
-     * @type {string}
-     * @memberof SendRequestJobData
-     */
-    'from': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SendRequestJobData
-     */
-    'to': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SendRequestJobData
-     */
-    'subject': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SendRequestJobData
-     */
-    'html': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SendRequestJobData
-     */
-    'replyTo': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SendRequestJobData
-     */
-    'directQueue': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SendRequestJobData
-     */
-    'processedBy': string;
-}
-/**
- * 
- * @export
  * @interface SingleSendRequestDto
  */
 export interface SingleSendRequestDto {
@@ -229,7 +186,7 @@ export interface SingleSendRequestDto {
      * @type {string}
      * @memberof SingleSendRequestDto
      */
-    'directQueue': string;
+    'queue': string;
 }
 /**
  * 
@@ -683,6 +640,9 @@ export const GatewayApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication Api-Key required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
 
 
     

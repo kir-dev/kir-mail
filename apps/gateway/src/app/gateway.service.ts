@@ -1,4 +1,4 @@
-import { SendRequestJobData, SingleSendRequestDto } from '@kir-mail/types';
+import { SingleSendRequestDto } from '@kir-mail/types';
 import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { Job, JobType, Queue } from 'bullmq';
 
@@ -10,7 +10,7 @@ const DEFAULT_QUEUE = 'send';
 @Injectable()
 export class GatewayService {
   private readonly logger = new Logger(GatewayService.name);
-  private readonly directQueues: Queue[] = [];
+  private readonly queues: Queue[] = [];
   constructor() {
     this.createQueue(DEFAULT_QUEUE);
     QUEUE_IDS.forEach((queueId) => this.createQueue(queueId));
@@ -31,7 +31,7 @@ export class GatewayService {
         },
       },
     });
-    this.directQueues.push(queue);
+    this.queues.push(queue);
   }
 
   async sendMessage(request: SingleSendRequestDto) {
@@ -62,11 +62,11 @@ export class GatewayService {
     ];
 
     const jobs: AnalyticsData[] = [];
-
     for (const type of types) {
-      let rawJobs: Job<SendRequestJobData>[] = [];
-      for (const queue of this.directQueues) {
-        rawJobs = await queue.getJobs(type);
+      const rawJobs: Job<SingleSendRequestDto>[] = [];
+      for (const queue of this.queues) {
+        const jobsForQueues = await queue.getJobs(type);
+        rawJobs.push(...jobsForQueues);
       }
       jobs.push(...this.mapJobsToDto(rawJobs, type));
     }
@@ -82,28 +82,29 @@ export class GatewayService {
     return {
       items: splitJobs,
       timestamps: timestamps,
-      availableQueues: this.directQueues.map((queue) => queue.name),
+      availableQueues: this.queues.map((queue) => queue.name),
     };
   }
 
   private getQueueForRequest(request: SingleSendRequestDto): Queue | undefined {
-    if (request.directQueue) {
-      return this.directQueues.find((queue) => queue.name === request.directQueue);
+    if (request.queue) {
+      return this.queues.find((queue) => queue.name === request.queue);
     }
     return this.getDefaultQueue();
   }
 
   private getDefaultQueue(): Queue {
-    return this.directQueues.find((queue) => queue.name === DEFAULT_QUEUE);
+    return this.queues.find((queue) => queue.name === DEFAULT_QUEUE);
   }
 
-  private mapJobsToDto(jobs: Job<SendRequestJobData>[], status: JobType): AnalyticsData[] {
+  private mapJobsToDto(jobs: Job<SingleSendRequestDto>[], status: JobType): AnalyticsData[] {
     return jobs.map((job) => ({
       id: job.id,
       data: job.data,
       status: status,
       timestamp: job.timestamp,
       queue: job.queueName,
+      processedBy: job.processedBy,
     }));
   }
 

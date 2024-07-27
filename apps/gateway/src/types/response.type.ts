@@ -1,4 +1,4 @@
-import { SendRequestJobData } from '@kir-mail/types';
+import { SingleSendRequestDto } from '@kir-mail/types';
 import { ApiProperty } from '@nestjs/swagger';
 import { JobType } from 'bullmq';
 
@@ -14,8 +14,8 @@ export class AnalyticsData {
   @ApiProperty({ example: '1' })
   id: string;
 
-  @ApiProperty({ type: SendRequestJobData })
-  data: SendRequestJobData;
+  @ApiProperty({ type: SingleSendRequestDto })
+  data: SingleSendRequestDto;
 
   @ApiProperty({
     example: 'completed',
@@ -39,6 +39,9 @@ export class AnalyticsData {
 
   @ApiProperty({ example: 'send' })
   queue: string;
+
+  @ApiProperty({ example: 'consumer' })
+  processedBy: string;
 }
 
 export class TimestampsDto {

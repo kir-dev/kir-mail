@@ -31,13 +31,6 @@ export class SingleSendRequestDto {
   queue?: string;
 }
 
-export class SendRequestJobData extends SingleSendRequestDto {
-  @ApiProperty({ example: 'consumer' })
-  @IsString()
-  @IsOptional()
-  processedBy?: string;
-}
-
 export class UserDto {
   @ApiProperty({ example: 'Test User' })
   @IsString()

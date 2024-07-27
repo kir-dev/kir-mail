@@ -1,4 +1,4 @@
-import { SendRequestJobData } from '@kir-mail/types';
+import { SingleSendRequestDto } from '@kir-mail/types';
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Job, MetricsTime, Worker } from 'bullmq';
@@ -21,7 +21,7 @@ export class ConsumerService implements OnModuleDestroy {
 
   constructor(private readonly mailerService: MailerService) {
     for (const queueId of QUEUE_IDS) {
-      this.logger.log(`Creating direct queue: ${queueId}`);
+      this.logger.log(`Creating queue: ${queueId}`);
       this.workers.push(
         new Worker(queueId, this.process.bind(this), {
           connection: {
@@ -47,10 +47,9 @@ export class ConsumerService implements OnModuleDestroy {
     }
   }
 
-  async process(job: Job<SendRequestJobData>) {
+  async process(job: Job<SingleSendRequestDto>) {
     this.logger.log(`Processing job #${job.id} 🔄`);
-    await job.updateData({ ...job.data, processedBy: CONSUMER_NAME });
-
+    await new Promise((resolve) => setTimeout(resolve, 10000));
     try {
       if (!DISABLE_EMAILS)
         await this.mailerService.sendMail({
@@ -64,7 +63,6 @@ export class ConsumerService implements OnModuleDestroy {
       this.logger.error(`Job ${job.id} failed with error: ${error} 🚨`);
       throw error;
     }
-    await job.updateData({ ...job.data, processedBy: CONSUMER_NAME });
     this.logger.log(`Job #${job.id} processed ✅`);
   }
 }
