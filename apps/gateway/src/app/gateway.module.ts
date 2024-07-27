@@ -17,6 +17,13 @@ import { TokenModule } from './token/token.module';
         host: REDIS_HOST,
         port: REDIS_PORT,
       },
+      defaultJobOptions: {
+        attempts: 5,
+        backoff: {
+          type: 'exponential',
+          delay: 5000,
+        },
+      },
     }),
   ],
   controllers: [GatewayController],
