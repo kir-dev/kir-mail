@@ -82,6 +82,7 @@ export class GatewayService {
     return {
       items: splitJobs,
       timestamps: timestamps,
+      availableQueues: this.directQueues.map((queue) => queue.name),
     };
   }
 

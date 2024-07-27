@@ -25,10 +25,10 @@ export class SingleSendRequestDto {
   @IsOptional()
   replyTo?: string;
 
-  @ApiProperty({ example: 'send-mail-account' })
+  @ApiProperty({ example: 'send' })
   @IsString()
   @IsOptional()
-  directQueue?: string;
+  queue?: string;
 }
 
 export class SendRequestJobData extends SingleSendRequestDto {

@@ -30,6 +30,7 @@ export function AnalyticsDataTable({ data }: AnalyticsDataTableProps) {
           header: 'Tárgy',
         },
         { accessorKey: 'data.processedBy', header: 'Szolgáltatás' },
+        { accessorKey: 'queue', header: 'Üzenetsor' },
         { accessorKey: 'status', header: 'Státusz', cell: ({ row }) => <StatusBadge status={row.original.status} /> },
       ]}
       data={data}

@@ -1,7 +1,7 @@
 import { SingleSendRequestDto } from '@kir-mail/types';
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBasicAuth, ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { RequestWithTokenUser } from '../types/request.types';
 import { AnalyticsDto, ResponseDto } from '../types/response.type';
@@ -33,6 +33,7 @@ export class GatewayController {
   @Post('send')
   @UseGuards(ApiKeyGuard)
   @ApiResponse({ status: 200, description: 'Send message', type: ResponseDto })
+  @ApiBearerAuth('Api-Key')
   async sendMessage(
     @Body() sendRequestDto: SingleSendRequestDto,
     @Req() req: RequestWithTokenUser

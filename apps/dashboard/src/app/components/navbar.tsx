@@ -33,6 +33,9 @@ export function Header() {
         </Link>
         <div className='flex items-center gap-5'>
           <Button variant='link' asChild className='p-0'>
+            <a href={`${import.meta.env.VITE_BACKEND_URL}/api`}>API Dokumentáció</a>
+          </Button>
+          <Button variant='link' asChild className='p-0'>
             <a href='/token'>Tokenek</a>
           </Button>
           <div className='h-6 w-0.5 rounded-full bg-slate-200' />

@@ -16,6 +16,14 @@ async function bootstrap() {
     .setTitle('Kir-Mail')
     .setDescription('Kir-Dev Mailing Service')
     .setVersion('1.0')
+    .addApiKey(
+      {
+        type: 'apiKey',
+        name: 'Authorization',
+        in: 'header',
+      },
+      'Api-Key'
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

@@ -53,6 +53,12 @@ export interface AnalyticsData {
      * @memberof AnalyticsData
      */
     'timestamp': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AnalyticsData
+     */
+    'queue': string;
 }
 
 export const AnalyticsDataStatusEnum = {
@@ -88,6 +94,12 @@ export interface AnalyticsDto {
      * @memberof AnalyticsDto
      */
     'timestamps': TimestampsDto;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof AnalyticsDto
+     */
+    'availableQueues': Array<string>;
 }
 /**
  * 
@@ -162,6 +174,18 @@ export interface SendRequestJobData {
      * @type {string}
      * @memberof SendRequestJobData
      */
+    'replyTo': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SendRequestJobData
+     */
+    'directQueue': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SendRequestJobData
+     */
     'processedBy': string;
 }
 /**
@@ -194,6 +218,18 @@ export interface SingleSendRequestDto {
      * @memberof SingleSendRequestDto
      */
     'html': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SingleSendRequestDto
+     */
+    'replyTo': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SingleSendRequestDto
+     */
+    'directQueue': string;
 }
 /**
  * 

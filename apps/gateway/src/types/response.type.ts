@@ -81,4 +81,7 @@ export class AnalyticsDto {
     type: TimestampsDto,
   })
   timestamps: TimestampsDto;
+
+  @ApiProperty({ type: [String] })
+  availableQueues: string[];
 }
