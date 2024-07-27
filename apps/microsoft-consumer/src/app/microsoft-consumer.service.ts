@@ -41,6 +41,7 @@ export class MicrosoftConsumerService extends WorkerHost {
           from: `"${job.data.from}" <${MAIL_USER}>`,
           subject: job.data.subject,
           html: job.data.html,
+          replyTo: job.data.replyTo,
         });
     } catch (error) {
       this.logger.error(`Job ${job.id} failed with error: ${error}`);

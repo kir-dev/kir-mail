@@ -41,6 +41,7 @@ export class MailgunConsumerService extends WorkerHost {
           from: `"${job.data.from}" <noreply@${MAIL_USER.split('@')[1]}>`,
           subject: job.data.subject,
           html: job.data.html,
+          replyTo: job.data.replyTo,
         });
     } catch (error) {
       this.logger.error(`Job ${job.id} failed with error: ${error}`);

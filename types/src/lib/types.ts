@@ -19,6 +19,11 @@ export class SingleSendRequestDto {
   @ApiProperty({ example: '<h1>Hello, World!</h1>' })
   @IsString()
   html: string;
+
+  @ApiProperty({ example: 'replyto@kir-dev.hu' })
+  @IsEmail()
+  @IsOptional()
+  replyTo?: string;
 }
 
 export class SendRequestJobData extends SingleSendRequestDto {
