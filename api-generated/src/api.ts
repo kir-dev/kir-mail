@@ -129,6 +129,25 @@ export interface CreateTokenDto {
 /**
  * 
  * @export
+ * @interface FromDto
+ */
+export interface FromDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof FromDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FromDto
+     */
+    'email': string;
+}
+/**
+ * 
+ * @export
  * @interface ResponseDto
  */
 export interface ResponseDto {
@@ -153,10 +172,10 @@ export interface ResponseDto {
 export interface SingleSendRequestDto {
     /**
      * 
-     * @type {string}
+     * @type {FromDto}
      * @memberof SingleSendRequestDto
      */
-    'from': string;
+    'from': FromDto;
     /**
      * 
      * @type {string}
@@ -180,13 +199,13 @@ export interface SingleSendRequestDto {
      * @type {string}
      * @memberof SingleSendRequestDto
      */
-    'replyTo': string;
+    'replyTo'?: string;
     /**
      * 
      * @type {string}
      * @memberof SingleSendRequestDto
      */
-    'queue': string;
+    'queue'?: string;
 }
 /**
  * 

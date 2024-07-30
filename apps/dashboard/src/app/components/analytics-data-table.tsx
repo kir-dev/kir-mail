@@ -18,8 +18,12 @@ export function AnalyticsDataTable({ data }: AnalyticsDataTableProps) {
           cell: ({ row }) => <>{formatHu(row.original.timestamp, 'MM. dd. • HH:mm')}</>,
         },
         {
-          accessorKey: 'data.from',
           header: 'Küldő',
+          cell: ({ row }) => (
+            <>
+              {row.original.data.from.name} ({row.original.data.from.email})
+            </>
+          ),
         },
         {
           accessorKey: 'data.to',

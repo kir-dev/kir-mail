@@ -7,7 +7,6 @@ import {
   CONSUMER_NAME,
   DISABLE_EMAILS,
   INTERVAL,
-  MAIL_USER,
   MAX_MESSAGES_PER_INTERVAL,
   QUEUE_IDS,
   REDIS_HOST,
@@ -54,7 +53,7 @@ export class ConsumerService implements OnModuleDestroy {
       if (!DISABLE_EMAILS)
         await this.mailerService.sendMail({
           to: job.data.to,
-          from: `"${job.data.from}" <noreply@${MAIL_USER.split('@')[1]}>`,
+          from: `"${job.data.from.name}" <${job.data.from.email}>`,
           subject: job.data.subject,
           html: job.data.html,
           replyTo: job.data.replyTo,

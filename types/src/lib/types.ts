@@ -1,11 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsOptional, IsString, Length } from 'class-validator';
 
-export class SingleSendRequestDto {
+export class FromDto {
   @ApiProperty({ example: 'Kir-Dev' })
   @IsString()
-  @Length(1, 50)
-  from: string;
+  name: string;
+
+  @ApiProperty({ example: 'noreply@kir-dev.hu' })
+  @IsEmail()
+  email: string;
+}
+
+export class SingleSendRequestDto {
+  @ApiProperty({ type: FromDto })
+  from: FromDto;
 
   @ApiProperty({ example: 'test@kir-dev.hu' })
   @IsEmail()
@@ -20,12 +28,12 @@ export class SingleSendRequestDto {
   @IsString()
   html: string;
 
-  @ApiProperty({ example: 'replyto@kir-dev.hu' })
+  @ApiProperty({ example: 'replyto@kir-dev.hu', required: false })
   @IsEmail()
   @IsOptional()
   replyTo?: string;
 
-  @ApiProperty({ example: 'send' })
+  @ApiProperty({ example: 'send', required: false })
   @IsString()
   @IsOptional()
   queue?: string;
