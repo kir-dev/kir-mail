@@ -27,8 +27,7 @@ export class AuthSchStrategy extends PassportStrategy(Strategy) {
 
   private validateGroupMemberships(profile: AuthSchProfile) {
     return profile.groupMemberships.some(
-      (group) =>
-        AUTHSCH_AUTHORIZED_GROUPS.includes(String(group.pekGroupId)) && group.end === null && group.status === 'tag'
+      (group) => AUTHSCH_AUTHORIZED_GROUPS.includes(String(group.pekGroupId)) && group.end === null
     );
   }
 }
