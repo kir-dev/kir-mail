@@ -34,7 +34,7 @@ export function Chart({ data }: ChartProps) {
       <div className='w-full h-80 bg-white rounded-md shadow-sm'>
         <ResponsiveLine
           data={lineData}
-          margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+          margin={{ top: 20, right: 20, bottom: 40, left: 20 }}
           xScale={{ type: 'point' }}
           yScale={{
             type: 'linear',

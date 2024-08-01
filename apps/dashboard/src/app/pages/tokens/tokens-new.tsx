@@ -10,7 +10,7 @@ import { TextField } from '../../components/fields';
 
 const TokenFormSchema = z.object({
   name: z.string().min(3).max(255),
-  quota: z.number(),
+  quota: z.coerce.number().int().min(0).max(1000000),
 }) satisfies ZodType<CreateTokenDto>;
 
 export function NewToken() {
@@ -31,17 +31,25 @@ export function NewToken() {
   });
 
   return (
-    <main className='space-y-5 max-w-xl bg-white rounded-lg shadow-md p-5'>
-      <h2>New Token</h2>
-      <FormProvider {...form}>
-        <form onSubmit={onSubmit} className='space-y-5'>
-          <TextField control={form.control} name='name' label='Name' placeholder='My App' autoComplete='off' />
-          <TextField control={form.control} name='quota' label='Quota' type='number' placeholder='30000' step={100} />
-          <Button isLoading={createToken.isPending} type='submit'>
-            Create
-          </Button>
-        </form>
-      </FormProvider>
+    <main>
+      <div className='space-y-5 max-w-xl bg-white rounded-lg shadow-md p-5'>
+        <h2>Új token</h2>
+        <FormProvider {...form}>
+          <form onSubmit={onSubmit} className='space-y-5'>
+            <TextField
+              control={form.control}
+              name='name'
+              label='Név'
+              placeholder='Én nem spammelős alkalmazásom'
+              autoComplete='off'
+            />
+            <TextField control={form.control} name='quota' label='Kvóta' type='number' placeholder='30000' step={100} />
+            <Button isLoading={createToken.isPending} type='submit'>
+              Létrehozás
+            </Button>
+          </form>
+        </FormProvider>
+      </div>
     </main>
   );
 }
