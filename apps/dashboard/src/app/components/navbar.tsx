@@ -42,7 +42,7 @@ export function Header() {
       <div className='flex justify-between items-center container mx-auto p-5'>
         <Link to='/' className='flex items-center gap-2'>
           <img src='/icon.png' alt='Kir-Mail' className='w-10 mx-auto' />
-          <h1 className='hidden md:block'>Kir-Mail</h1>
+          <h1>Kir-Mail</h1>
         </Link>
         <DesktopNav />
         <MobileNav />
