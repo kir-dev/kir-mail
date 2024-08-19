@@ -11,7 +11,7 @@ export class AuthSchStrategy extends PassportStrategy(Strategy) {
     super({
       clientId: AUTHSCH_CLIENT_ID,
       clientSecret: AUTHSCH_CLIENT_SECRET,
-      scopes: [AuthSchScope.BASIC, AuthSchScope.GROUP_MEMBERSHIPS, AuthSchScope.DISPLAY_NAME],
+      scopes: [AuthSchScope.PROFILE, AuthSchScope.PEK_PROFILE],
     });
   }
 
@@ -21,13 +21,13 @@ export class AuthSchStrategy extends PassportStrategy(Strategy) {
     }
 
     return {
-      displayName: userProfile.displayName,
+      displayName: userProfile.fullName,
     };
   }
 
   private validateGroupMemberships(profile: AuthSchProfile) {
-    return profile.groupMemberships.some(
-      (group) => AUTHSCH_AUTHORIZED_GROUPS.includes(String(group.pekGroupId)) && group.end === null
+    return [...profile.pek.activeMemberAt, ...profile.pek.alumniMemberAt].some((group) =>
+      AUTHSCH_AUTHORIZED_GROUPS.includes(String(group.groupId))
     );
   }
 }

@@ -13,7 +13,7 @@
   "private": true,
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
-    "@kir-dev/passport-authsch": "^1.0.0",
+    "@kir-dev/passport-authsch": "^2.0.3",
     "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/bullmq": "^10.1.1",
     "@nestjs/common": "^10.0.2",

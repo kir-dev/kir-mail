@@ -1936,12 +1936,12 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@kir-dev/passport-authsch@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@kir-dev/passport-authsch/-/passport-authsch-1.0.0.tgz#39f3117cbe61e29ffc1139d01ec7e8290a8ee6aa"
-  integrity sha512-oMyocn/KmSZ6knpa/ek0oEUXSI8miHl3yPq6LOu/s4iebYQeVBpHMQe2iCpLA9QD1GeXIW9fQKSlgitnblEJaQ==
+"@kir-dev/passport-authsch@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@kir-dev/passport-authsch/-/passport-authsch-2.0.3.tgz#d6668d822447ad0973590976e3545921ff146c9b"
+  integrity sha512-UDOtR/kQdRvPlrMfCCV22odzRUvQ3dL7yvhJzwqs99SmuEr4C7wE+pKQpXFAN0LqXuxCeJp3kWaN5Z/otl6c+w==
   dependencies:
-    axios "^1.7.2"
+    axios "^1.7.4"
     passport-strategy "^1.0.0"
 
 "@leichtgewicht/ip-codec@^2.0.1":
@@ -4483,7 +4483,7 @@ axios@1.6.8:
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
-axios@^1.6.0, axios@^1.7.2, axios@^1.7.4:
+axios@^1.6.0, axios@^1.7.4:
   version "1.7.4"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.4.tgz#4c8ded1b43683c8dd362973c393f3ede24052aa2"
   integrity sha512-DukmaFRnY6AzAALSH4J2M3k6PkaC+MfaAGdEERRWcC9q3/TWQwLpHR8ZRLKTdQ3aBDL64EdluRDjJqKw+BPZEw==
