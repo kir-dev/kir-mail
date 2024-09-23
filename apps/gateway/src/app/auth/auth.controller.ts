@@ -45,7 +45,7 @@ export class AuthController {
   })
   logout(@Res() res: Response): void {
     res.clearCookie('jwt', {
-      domain: getHostFromUrl(FRONTEND_URL),
+      domain: COOKIE_DOMAIN,
     });
     res.redirect(FRONTEND_URL);
   }
