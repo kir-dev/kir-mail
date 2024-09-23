@@ -1,4 +1,4 @@
-import { SingleSendRequestDto } from '@kir-mail/types';
+import { BatchSendRequestDto, SingleSendRequestDto } from '@kir-mail/types';
 import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { Job, JobType, Queue } from 'bullmq';
 
@@ -35,13 +35,24 @@ export class GatewayService {
   }
 
   async sendMessage(request: SingleSendRequestDto) {
-    const queue = this.getQueueForRequest(request);
+    const queue = this.getQueueByName(request.queue);
     if (!queue) {
       throw new NotFoundException('Direct queue not found');
     }
 
     try {
       await queue.add('send', request);
+    } catch (error) {
+      this.logger.error(`Failed to add job to queue: ${error}`);
+      throw new InternalServerErrorException('Failed to add job to queue');
+    }
+  }
+
+  async sendBulkMessages(batchRequests: BatchSendRequestDto) {
+    const queue = this.getQueueByName(batchRequests.queue);
+    batchRequests.messages.forEach((message) => this.overwriteQueue(message, batchRequests.queue));
+    try {
+      await queue.addBulk(batchRequests.messages.map((message) => ({ name: 'send', data: message })));
     } catch (error) {
       this.logger.error(`Failed to add job to queue: ${error}`);
       throw new InternalServerErrorException('Failed to add job to queue');
@@ -86,11 +97,14 @@ export class GatewayService {
     };
   }
 
-  private getQueueForRequest(request: SingleSendRequestDto): Queue | undefined {
-    if (request.queue) {
-      return this.queues.find((queue) => queue.name === request.queue);
+  private overwriteQueue(message: SingleSendRequestDto, queue: string | undefined) {
+    if (queue) {
+      message.queue = queue;
     }
-    return this.getDefaultQueue();
+  }
+
+  private getQueueByName(queue: string | undefined): Queue | undefined {
+    return queue ? this.queues.find((q) => q.name === queue) : this.getDefaultQueue();
   }
 
   private getDefaultQueue(): Queue {

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsOptional, IsString, Length } from 'class-validator';
+import { IsEmail, IsOptional, IsString, Length, ValidateNested } from 'class-validator';
 
 export class FromDto {
   @ApiProperty({ example: 'Kir-Dev' })
@@ -13,6 +13,7 @@ export class FromDto {
 
 export class SingleSendRequestDto {
   @ApiProperty({ type: FromDto })
+  @ValidateNested()
   from: FromDto;
 
   @ApiProperty({ example: 'test@kir-dev.hu' })
@@ -43,4 +44,15 @@ export class UserDto {
   @ApiProperty({ example: 'Test User' })
   @IsString()
   displayName: string;
+}
+
+export class BatchSendRequestDto {
+  @ApiProperty({ type: [SingleSendRequestDto] })
+  @ValidateNested({ each: true })
+  messages: SingleSendRequestDto[];
+
+  @ApiProperty({ example: 'send', required: false })
+  @IsString()
+  @IsOptional()
+  queue?: string;
 }

@@ -9,6 +9,6 @@ export function useUpdateTokenQuota(id: string) {
       const response = await TokenClient.tokenControllerUpdateTokenQuota(id, { quota });
       return response.data;
     },
-    onMutate: () => queryClient.invalidateQueries({ queryKey: ['tokens'] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tokens'] }),
   });
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { Token } from '@prisma/client';
 import * as crypto from 'crypto';
 
@@ -21,18 +21,20 @@ export class TokenService {
     });
   }
 
-  checkQuota(token: Token): boolean {
-    return token.quota > token.used;
+  checkQuota(token: Token, request = 1): void {
+    if (token.quota - token.used < request) {
+      throw new HttpException('Quota exceeded', 429);
+    }
   }
 
-  incrementTokenUsage(token: Token): Promise<Token> {
+  incrementTokenUsage(token: Token, by = 1): Promise<Token> {
     return this.prisma.token.update({
       where: {
         id: token.id,
       },
       data: {
         used: {
-          increment: 1,
+          increment: by,
         },
       },
     });

@@ -1,7 +1,7 @@
-import { SingleSendRequestDto } from '@kir-mail/types';
+import { BatchSendRequestDto, SingleSendRequestDto } from '@kir-mail/types';
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBasicAuth, ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { RequestWithTokenUser } from '../types/request.types';
 import { AnalyticsDto, ResponseDto } from '../types/response.type';
@@ -38,11 +38,29 @@ export class GatewayController {
     @Body() sendRequestDto: SingleSendRequestDto,
     @Req() req: RequestWithTokenUser
   ): Promise<ResponseDto> {
+    this.tokenService.checkQuota(req.user, 1);
     await this.gatewayService.sendMessage(sendRequestDto);
     await this.tokenService.incrementTokenUsage(req.user);
     return {
       status: 200,
       message: 'Message queued for sending',
+    };
+  }
+
+  @Post('send-bulk')
+  @UseGuards(ApiKeyGuard)
+  @ApiResponse({ status: 200, description: 'Send messages in bulk', type: ResponseDto })
+  @ApiBearerAuth('Api-Key')
+  async sendBulkMessages(
+    @Body() batchSendRequestDto: BatchSendRequestDto,
+    @Req() req: RequestWithTokenUser
+  ): Promise<ResponseDto> {
+    this.tokenService.checkQuota(req.user, batchSendRequestDto.messages.length);
+    await this.gatewayService.sendBulkMessages(batchSendRequestDto);
+    await this.tokenService.incrementTokenUsage(req.user, batchSendRequestDto.messages.length);
+    return {
+      status: 200,
+      message: `${batchSendRequestDto.messages.length} messages queued for sending`,
     };
   }
 }

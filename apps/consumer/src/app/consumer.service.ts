@@ -7,6 +7,7 @@ import {
   CONSUMER_NAME,
   DISABLE_EMAILS,
   INTERVAL,
+  MAIL_FROM,
   MAX_MESSAGES_PER_INTERVAL,
   QUEUE_IDS,
   REDIS_HOST,
@@ -48,16 +49,18 @@ export class ConsumerService implements OnModuleDestroy {
 
   async process(job: Job<SingleSendRequestDto>) {
     this.logger.log(`Processing job #${job.id} 🔄`);
-    await new Promise((resolve) => setTimeout(resolve, 10000));
     try {
-      if (!DISABLE_EMAILS)
+      if (DISABLE_EMAILS) {
+        this.logger.log(`Email sending disabled, would have sent to: ${job.data.to}`);
+      } else {
         await this.mailerService.sendMail({
           to: job.data.to,
-          from: `"${job.data.from.name}" <${job.data.from.email}>`,
+          from: `"${job.data.from.name}" <${MAIL_FROM}>`,
           subject: job.data.subject,
           html: job.data.html,
           replyTo: job.data.replyTo,
         });
+      }
     } catch (error) {
       this.logger.error(`Job ${job.id} failed with error: ${error} 🚨`);
       throw error;
