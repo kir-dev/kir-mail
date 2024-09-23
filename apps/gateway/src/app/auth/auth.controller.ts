@@ -1,18 +1,17 @@
 import { CurrentUser } from '@kir-dev/passport-authsch';
 import { UserDto } from '@kir-mail/types';
-import { Controller, Get, Logger, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 
-import { FRONTEND_URL } from '../../config';
+import { COOKIE_DOMAIN, FRONTEND_URL } from '../../config';
 import { getHostFromUrl } from '../utils/auth.utils';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
 @ApiTags('auth')
 export class AuthController {
-  private readonly logger = new Logger(AuthController.name);
   constructor(private readonly authService: AuthService) {}
 
   @UseGuards(AuthGuard('authsch'))
@@ -30,11 +29,10 @@ export class AuthController {
   @ApiQuery({ name: 'code', required: true })
   oauthRedirect(@CurrentUser() user: UserDto, @Res() res: Response): void {
     const jwt = this.authService.login(user);
-    this.logger.debug(`Setting JWT cookie for ${getHostFromUrl(FRONTEND_URL)}`);
     res.cookie('jwt', jwt, {
       httpOnly: true,
       secure: true,
-      domain: getHostFromUrl(FRONTEND_URL),
+      domain: COOKIE_DOMAIN,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
     });
     res.redirect(FRONTEND_URL);

@@ -3,12 +3,12 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { GatewayModule } from './app/gateway.module';
-import { PORT } from './config';
+import { COOKIE_DOMAIN, PORT } from './config';
 
 async function bootstrap() {
   const app = await NestFactory.create(GatewayModule);
   app.useGlobalPipes(new ValidationPipe());
-  app.enableCors({ credentials: true, origin: true });
+  app.enableCors({ credentials: true, origin: COOKIE_DOMAIN });
   app.enableShutdownHooks();
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
