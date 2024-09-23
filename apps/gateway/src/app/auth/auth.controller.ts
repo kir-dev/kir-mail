@@ -1,6 +1,6 @@
 import { CurrentUser } from '@kir-dev/passport-authsch';
 import { UserDto } from '@kir-mail/types';
-import { Controller, Get, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Logger, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -12,6 +12,7 @@ import { AuthService } from './auth.service';
 @Controller('auth')
 @ApiTags('auth')
 export class AuthController {
+  private readonly logger = new Logger(AuthController.name);
   constructor(private readonly authService: AuthService) {}
 
   @UseGuards(AuthGuard('authsch'))
@@ -29,6 +30,7 @@ export class AuthController {
   @ApiQuery({ name: 'code', required: true })
   oauthRedirect(@CurrentUser() user: UserDto, @Res() res: Response): void {
     const jwt = this.authService.login(user);
+    this.logger.debug(`Setting JWT cookie for ${getHostFromUrl(FRONTEND_URL)}`);
     res.cookie('jwt', jwt, {
       httpOnly: true,
       secure: true,
