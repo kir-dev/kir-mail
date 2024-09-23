@@ -53,12 +53,13 @@ export function Header() {
 
 function DesktopNav() {
   return (
-    <nav className='hidden md:flex gap-5'>
+    <nav className='hidden md:flex gap-5 items-center'>
       {navItems.map((item) => (
         <Button key={item.name} variant='link' asChild className='p-0'>
           <Link to={item.href}>{item.name}</Link>
         </Button>
       ))}
+      <Authenticator />
     </nav>
   );
 }

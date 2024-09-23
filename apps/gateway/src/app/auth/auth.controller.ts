@@ -1,10 +1,12 @@
 import { CurrentUser } from '@kir-dev/passport-authsch';
 import { UserDto } from '@kir-mail/types';
-import { Controller, Get, Redirect, UseGuards } from '@nestjs/common';
+import { Controller, Get, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 
 import { FRONTEND_URL } from '../../config';
+import { getHostFromUrl } from '../utils/auth.utils';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -20,14 +22,32 @@ export class AuthController {
 
   @Get('callback')
   @UseGuards(AuthGuard('authsch'))
-  @Redirect()
-  @ApiResponse({ status: 302, description: 'Redirects to the frontend with the JWT in the query string.' })
+  @ApiResponse({
+    status: 302,
+    description: 'Redirects to the frontend and sets cookie with JWT.',
+  })
   @ApiQuery({ name: 'code', required: true })
-  oauthRedirect(@CurrentUser() user: UserDto) {
+  oauthRedirect(@CurrentUser() user: UserDto, @Res() res: Response): void {
     const jwt = this.authService.login(user);
-    return {
-      url: `${FRONTEND_URL}?jwt=${jwt}`,
-    };
+    res.cookie('jwt', jwt, {
+      httpOnly: true,
+      secure: true,
+      domain: getHostFromUrl(FRONTEND_URL),
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    });
+    res.redirect(FRONTEND_URL);
+  }
+
+  @Get('logout')
+  @ApiResponse({
+    status: 302,
+    description: 'Redirects to the frontend and clears the JWT cookie.',
+  })
+  logout(@Res() res: Response): void {
+    res.clearCookie('jwt', {
+      domain: getHostFromUrl(FRONTEND_URL),
+    });
+    res.redirect(FRONTEND_URL);
   }
 
   @Get('me')

@@ -8,7 +8,8 @@ import { PORT } from './config';
 async function bootstrap() {
   const app = await NestFactory.create(GatewayModule);
   app.useGlobalPipes(new ValidationPipe());
-  app.enableCors();
+  app.enableCors({ credentials: true, origin: true });
+  app.enableShutdownHooks();
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
 
