@@ -110,6 +110,25 @@ export interface AnalyticsDto {
 /**
  * 
  * @export
+ * @interface BatchSendRequestDto
+ */
+export interface BatchSendRequestDto {
+    /**
+     * 
+     * @type {Array<SingleSendRequestDto>}
+     * @memberof BatchSendRequestDto
+     */
+    'messages': Array<SingleSendRequestDto>;
+    /**
+     * 
+     * @type {string}
+     * @memberof BatchSendRequestDto
+     */
+    'queue'?: string;
+}
+/**
+ * 
+ * @export
  * @interface CreateTokenDto
  */
 export interface CreateTokenDto {
@@ -144,6 +163,49 @@ export interface FromDto {
      * @memberof FromDto
      */
     'email': string;
+}
+/**
+ * 
+ * @export
+ * @interface MultipleSendRequestDto
+ */
+export interface MultipleSendRequestDto {
+    /**
+     * 
+     * @type {FromDto}
+     * @memberof MultipleSendRequestDto
+     */
+    'from': FromDto;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof MultipleSendRequestDto
+     */
+    'to': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof MultipleSendRequestDto
+     */
+    'subject': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MultipleSendRequestDto
+     */
+    'html': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MultipleSendRequestDto
+     */
+    'replyTo'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MultipleSendRequestDto
+     */
+    'queue'?: string;
 }
 /**
  * 
@@ -390,6 +452,35 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        authControllerLogout: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/auth/logout`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         authControllerMe: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/auth/me`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -478,6 +569,17 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async authControllerLogout(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerLogout(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.authControllerLogout']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async authControllerMe(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerMe(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -519,6 +621,14 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        authControllerLogout(options?: any): AxiosPromise<void> {
+            return localVarFp.authControllerLogout(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         authControllerMe(options?: any): AxiosPromise<UserDto> {
             return localVarFp.authControllerMe(options).then((request) => request(axios, basePath));
         },
@@ -549,6 +659,16 @@ export class AuthApi extends BaseAPI {
      */
     public authControllerLogin(options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).authControllerLogin(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public authControllerLogout(options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).authControllerLogout(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -641,6 +761,44 @@ export const GatewayApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {BatchSendRequestDto} batchSendRequestDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        gatewayControllerSendBulkMessages: async (batchSendRequestDto: BatchSendRequestDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'batchSendRequestDto' is not null or undefined
+            assertParamExists('gatewayControllerSendBulkMessages', 'batchSendRequestDto', batchSendRequestDto)
+            const localVarPath = `/api/send-bulk`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Api-Key required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(batchSendRequestDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {SingleSendRequestDto} singleSendRequestDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -671,6 +829,44 @@ export const GatewayApiAxiosParamCreator = function (configuration?: Configurati
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(singleSendRequestDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {MultipleSendRequestDto} multipleSendRequestDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        gatewayControllerSendMultiRecipientMessage: async (multipleSendRequestDto: MultipleSendRequestDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'multipleSendRequestDto' is not null or undefined
+            assertParamExists('gatewayControllerSendMultiRecipientMessage', 'multipleSendRequestDto', multipleSendRequestDto)
+            const localVarPath = `/api/send-to-many`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Api-Key required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(multipleSendRequestDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -711,6 +907,18 @@ export const GatewayApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {BatchSendRequestDto} batchSendRequestDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async gatewayControllerSendBulkMessages(batchSendRequestDto: BatchSendRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResponseDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.gatewayControllerSendBulkMessages(batchSendRequestDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['GatewayApi.gatewayControllerSendBulkMessages']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {SingleSendRequestDto} singleSendRequestDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -719,6 +927,18 @@ export const GatewayApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.gatewayControllerSendMessage(singleSendRequestDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['GatewayApi.gatewayControllerSendMessage']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {MultipleSendRequestDto} multipleSendRequestDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async gatewayControllerSendMultiRecipientMessage(multipleSendRequestDto: MultipleSendRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResponseDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.gatewayControllerSendMultiRecipientMessage(multipleSendRequestDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['GatewayApi.gatewayControllerSendMultiRecipientMessage']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -749,12 +969,30 @@ export const GatewayApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @param {BatchSendRequestDto} batchSendRequestDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        gatewayControllerSendBulkMessages(batchSendRequestDto: BatchSendRequestDto, options?: any): AxiosPromise<ResponseDto> {
+            return localVarFp.gatewayControllerSendBulkMessages(batchSendRequestDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {SingleSendRequestDto} singleSendRequestDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         gatewayControllerSendMessage(singleSendRequestDto: SingleSendRequestDto, options?: any): AxiosPromise<ResponseDto> {
             return localVarFp.gatewayControllerSendMessage(singleSendRequestDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {MultipleSendRequestDto} multipleSendRequestDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        gatewayControllerSendMultiRecipientMessage(multipleSendRequestDto: MultipleSendRequestDto, options?: any): AxiosPromise<ResponseDto> {
+            return localVarFp.gatewayControllerSendMultiRecipientMessage(multipleSendRequestDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -788,6 +1026,17 @@ export class GatewayApi extends BaseAPI {
 
     /**
      * 
+     * @param {BatchSendRequestDto} batchSendRequestDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GatewayApi
+     */
+    public gatewayControllerSendBulkMessages(batchSendRequestDto: BatchSendRequestDto, options?: RawAxiosRequestConfig) {
+        return GatewayApiFp(this.configuration).gatewayControllerSendBulkMessages(batchSendRequestDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {SingleSendRequestDto} singleSendRequestDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -795,6 +1044,17 @@ export class GatewayApi extends BaseAPI {
      */
     public gatewayControllerSendMessage(singleSendRequestDto: SingleSendRequestDto, options?: RawAxiosRequestConfig) {
         return GatewayApiFp(this.configuration).gatewayControllerSendMessage(singleSendRequestDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {MultipleSendRequestDto} multipleSendRequestDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GatewayApi
+     */
+    public gatewayControllerSendMultiRecipientMessage(multipleSendRequestDto: MultipleSendRequestDto, options?: RawAxiosRequestConfig) {
+        return GatewayApiFp(this.configuration).gatewayControllerSendMultiRecipientMessage(multipleSendRequestDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

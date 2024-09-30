@@ -1,4 +1,4 @@
-import { BatchSendRequestDto, SingleSendRequestDto } from '@kir-mail/types';
+import { BatchSendRequestDto, MultipleSendRequestDto, SingleSendRequestDto } from '@kir-mail/types';
 import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { Job, JobType, Queue } from 'bullmq';
 
@@ -42,6 +42,25 @@ export class GatewayService {
 
     try {
       await queue.add('send', request);
+    } catch (error) {
+      this.logger.error(`Failed to add job to queue: ${error}`);
+      throw new InternalServerErrorException('Failed to add job to queue');
+    }
+  }
+
+  async sendMultiRecipientMessage(request: MultipleSendRequestDto) {
+    const queue = this.getQueueByName(request.queue);
+    if (!queue) {
+      throw new NotFoundException('Direct queue not found');
+    }
+
+    try {
+      await queue.addBulk(
+        request.to.map((to) => ({
+          name: 'send',
+          data: { ...request, to },
+        }))
+      );
     } catch (error) {
       this.logger.error(`Failed to add job to queue: ${error}`);
       throw new InternalServerErrorException('Failed to add job to queue');

@@ -1,4 +1,4 @@
-import { BatchSendRequestDto, SingleSendRequestDto } from '@kir-mail/types';
+import { BatchSendRequestDto, MultipleSendRequestDto, SingleSendRequestDto } from '@kir-mail/types';
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -44,6 +44,23 @@ export class GatewayController {
     return {
       status: 200,
       message: 'Message queued for sending',
+    };
+  }
+
+  @Post('send-to-many')
+  @UseGuards(ApiKeyGuard)
+  @ApiResponse({ status: 200, description: 'Send message to many recipients', type: ResponseDto })
+  @ApiBearerAuth('Api-Key')
+  async sendMultiRecipientMessage(
+    @Body() sendRequestDto: MultipleSendRequestDto,
+    @Req() req: RequestWithTokenUser
+  ): Promise<ResponseDto> {
+    this.tokenService.checkQuota(req.user, sendRequestDto.to.length);
+    await this.gatewayService.sendMultiRecipientMessage(sendRequestDto);
+    await this.tokenService.incrementTokenUsage(req.user, sendRequestDto.to.length);
+    return {
+      status: 200,
+      message: 'Messages queued for sending',
     };
   }
 

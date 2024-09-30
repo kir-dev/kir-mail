@@ -40,6 +40,35 @@ export class SingleSendRequestDto {
   queue?: string;
 }
 
+export class MultipleSendRequestDto {
+  @ApiProperty({ type: FromDto })
+  @ValidateNested()
+  from: FromDto;
+
+  @ApiProperty({ example: ['test1@kir-dev.hu', 'test2@kir-dev.hu'] })
+  @IsEmail({}, { each: true })
+  @Length(1, 50, { each: true })
+  to: string[];
+
+  @ApiProperty({ example: 'Test' })
+  @IsString()
+  subject: string;
+
+  @ApiProperty({ example: '<h1>Hello, World!</h1>' })
+  @IsString()
+  html: string;
+
+  @ApiProperty({ example: 'replyto@kir-dev.hu', required: false })
+  @IsEmail()
+  @IsOptional()
+  replyTo?: string;
+
+  @ApiProperty({ example: 'send', required: false })
+  @IsString()
+  @IsOptional()
+  queue?: string;
+}
+
 export class UserDto {
   @ApiProperty({ example: 'Test User' })
   @IsString()
