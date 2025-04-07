@@ -21,7 +21,7 @@ export function AnalyticsDataTable({ data }: AnalyticsDataTableProps) {
           header: 'Küldő',
           cell: ({ row }) => (
             <>
-              {row.original.data.from.name} ({row.original.data.from.email})
+              {row.original.data.from?.name} ({row.original.data.from?.email})
             </>
           ),
         },
