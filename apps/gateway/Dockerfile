@@ -1,5 +1,7 @@
 FROM docker.io/node:lts-alpine
 
+RUN apk add --no-cache openssl
+
 ARG SERVICE_NAME=gateway
 
 WORKDIR /apps/${SERVICE_NAME}
