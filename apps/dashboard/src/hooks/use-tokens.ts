@@ -9,5 +9,6 @@ export function useTokens() {
       const response = await TokenClient.tokenControllerGetTokens();
       return response.data;
     },
+    select: (data) => data.sort((a, b) => a.name.localeCompare(b.name)),
   });
 }

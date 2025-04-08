@@ -6,7 +6,6 @@ import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 
 import { COOKIE_DOMAIN, FRONTEND_URL } from '../../config';
-import { getHostFromUrl } from '../utils/auth.utils';
 import { AuthService } from './auth.service';
 
 @Controller('auth')

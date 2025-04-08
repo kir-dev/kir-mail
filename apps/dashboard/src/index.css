@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #f5f7fa;
+    --foreground: #0c0f17;
+
+    --card: #ffffff;
+    --card-foreground: #0c0f17;
+
+    --popover: #ffffff;
+    --popover-foreground: #0c0f17;
+
+    --primary: #0ea5e9;
+    --primary-foreground: #f5f7fa;
+
+    --secondary: #3949ab;
+    --secondary-foreground: #f5f7fa;
+
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+
+    --accent: #ebf5ff;
+    --accent-foreground: #0ea5e9;
+
+    --destructive: #ef4444;
+    --destructive-foreground: #f5f7fa;
+
+    --border: #e1e7ef;
+    --input: #e1e7ef;
+    --ring: #0ea5e9;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: #fafafa;
+    --sidebar-foreground: #1e293b;
+    --sidebar-primary: #0ea5e9;
+    --sidebar-primary-foreground: #fafafa;
+    --sidebar-accent: #ebf5ff;
+    --sidebar-accent-foreground: #0ea5e9;
+    --sidebar-border: #e2e8f0;
+    --sidebar-ring: #0ea5e9;
+  }
+
+  .dark {
+    --background: #0f1729;
+    --foreground: #f8fafc;
+
+    --card: #0f1729;
+    --card-foreground: #f8fafc;
+
+    --popover: #0f1729;
+    --popover-foreground: #f8fafc;
+
+    --primary: #0ea5e9;
+    --primary-foreground: #1e293b;
+
+    --secondary: #1e293b;
+    --secondary-foreground: #f8fafc;
+
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8;
+
+    --accent: #1e293b;
+    --accent-foreground: #f8fafc;
+
+    --destructive: #7f1d1d;
+    --destructive-foreground: #f8fafc;
+
+    --border: #1e293b;
+    --input: #1e293b;
+    --ring: #cbd5e1;
+
+    --sidebar-background: #1e293b;
+    --sidebar-foreground: #f8fafc;
+    --sidebar-primary: #0ea5e9;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #334155;
+    --sidebar-accent-foreground: #f8fafc;
+    --sidebar-border: #334155;
+    --sidebar-ring: #0ea5e9;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .status-badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .status-badge-success {
+    @apply status-badge bg-success/10 text-success;
+  }
+
+  .status-badge-warning {
+    @apply status-badge bg-warning/10 text-warning;
+  }
+
+  .status-badge-error {
+    @apply status-badge bg-error/10 text-error;
+  }
+
+  .status-badge-active {
+    @apply status-badge bg-info/10 text-info;
+  }
+
+  .status-badge-prioritized {
+    @apply status-badge bg-purple-500/10 text-purple-500;
+  }
+
+  .status-badge-muted {
+    @apply status-badge bg-muted text-muted-foreground;
+  }
+}

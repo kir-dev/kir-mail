@@ -19,6 +19,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@kir-mail/api-generated/*': '../../api-generated/src/*',
+      '@': './src',
     },
   },
   plugins: [react(), nxViteTsPaths()],

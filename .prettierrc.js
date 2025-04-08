@@ -8,4 +8,3 @@ module.exports = {
   bracketSameLine: false,
   endOfLine: 'lf',
 };
-
