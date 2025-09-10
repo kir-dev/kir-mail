@@ -12,6 +12,7 @@
   },
   "private": true,
   "dependencies": {
+    "@azure/communication-email": "^1.0.0",
     "@hookform/resolvers": "^3.9.0",
     "@kir-dev/passport-authsch": "^2.2.2",
     "@nestjs-modules/mailer": "^2.0.2",

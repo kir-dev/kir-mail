@@ -1,25 +1,24 @@
 import { SingleSendRequestDto } from '@kir-mail/types';
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import { MailerService } from '@nestjs-modules/mailer';
 import { Job, MetricsTime, Worker } from 'bullmq';
 
 import {
   CONSUMER_NAME,
   DISABLE_EMAILS,
   INTERVAL,
-  MAIL_FROM,
   MAX_MESSAGES_PER_INTERVAL,
   QUEUE_IDS,
   REDIS_HOST,
   REDIS_PORT,
 } from '../config';
+import { EmailProvider } from './email/email-provider.interface';
 
 @Injectable()
 export class ConsumerService implements OnModuleDestroy {
   private readonly logger = new Logger(CONSUMER_NAME);
   private readonly workers: Worker[] = [];
 
-  constructor(private readonly mailerService: MailerService) {
+  constructor(private readonly emailProvider: EmailProvider) {
     for (const queueId of QUEUE_IDS) {
       this.logger.log(`Creating queue: ${queueId}`);
       this.workers.push(
@@ -53,13 +52,7 @@ export class ConsumerService implements OnModuleDestroy {
       if (DISABLE_EMAILS) {
         this.logger.log(`Email sending disabled, would have sent to: ${job.data.to}`);
       } else {
-        await this.mailerService.sendMail({
-          to: job.data.to,
-          from: `"${job.data.from.name}" <${MAIL_FROM}>`,
-          subject: job.data.subject,
-          html: job.data.html,
-          replyTo: job.data.replyTo,
-        });
+        await this.emailProvider.sendEmail(job.data);
       }
     } catch (error) {
       this.logger.error(`Job ${job.id} failed with error: ${error} 🚨`);
