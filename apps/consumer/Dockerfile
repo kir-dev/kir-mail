@@ -8,8 +8,10 @@ RUN addgroup --system ${SERVICE_NAME} && \
           adduser --system -G ${SERVICE_NAME} ${SERVICE_NAME}
 
 COPY dist/apps/${SERVICE_NAME} .
+COPY .yarnrc.yml .
 RUN chown -R ${SERVICE_NAME}:${SERVICE_NAME} .
 
-RUN yarn install --production --frozen-lockfile
+RUN corepack enable
+RUN NODE_ENV=production yarn install --immutable
 
 CMD ["node", "main.js"]

@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Token } from '@prisma/client';
 import { IsNumber, IsPositive, IsString } from 'class-validator';
+
+import { Token } from '../generated/client.js';
 
 export class CreateTokenDto {
   @ApiProperty({ example: 'New Token' })

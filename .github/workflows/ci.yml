@@ -20,10 +20,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
+
+      - name: Enable corepack
+        run: corepack enable
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --immutable
 
       - name: Run ESLint check
         run: yarn lint
@@ -40,10 +43,18 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
+
+      - name: Enable corepack
+        run: corepack enable
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --immutable
+
+      - name: Generate Prisma client
+        run: yarn prisma:generate
+        env:
+          DATABASE_URL: postgresql://localhost:5432/kir-mail
 
       - name: Build apps
         run: yarn build

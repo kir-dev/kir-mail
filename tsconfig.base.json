@@ -4,7 +4,7 @@
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
@@ -13,10 +13,9 @@
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": ".",
     "paths": {
-      "@kir-mail/api-generated": ["api-generated/src/index.ts"],
-      "@kir-mail/types": ["types/src/index.ts"]
+      "@kir-mail/api-generated": ["./api-generated/src/index.ts"],
+      "@kir-mail/types": ["./types/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
