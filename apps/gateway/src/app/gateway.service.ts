@@ -71,7 +71,7 @@ export class GatewayService {
     const queue = this.getQueueByName(batchRequests.queue);
     batchRequests.messages.forEach((message) => this.overwriteQueue(message, batchRequests.queue));
     try {
-      await queue.addBulk(batchRequests.messages.map((message) => ({ name: 'send', data: message })));
+      await queue!.addBulk(batchRequests.messages.map((message) => ({ name: 'send', data: message })));
     } catch (error) {
       this.logger.error(`Failed to add job to queue: ${error}`);
       throw new InternalServerErrorException('Failed to add job to queue');
@@ -126,18 +126,27 @@ export class GatewayService {
     return queue ? this.queues.find((q) => q.name === queue) : this.getDefaultQueue();
   }
 
-  private getDefaultQueue(): Queue {
+  private getDefaultQueue(): Queue | undefined {
     return this.queues.find((queue) => queue.name === DEFAULT_QUEUE);
   }
 
   private mapJobsToDto(jobs: Job<SingleSendRequestDto>[], status: JobType): AnalyticsData[] {
     return jobs.map((job) => ({
-      id: job.id,
-      data: job.data,
+      id: job.id ?? '',
+      data: {
+        ...job.data,
+        attachments: job.data.attachments?.map((a) => ({
+          filename: a.filename,
+          content: '[REDACTED]',
+          contentType: a.contentType,
+          disposition: a.disposition,
+          contentId: a.contentId,
+        })),
+      },
       status: status,
       timestamp: job.timestamp,
       queue: job.queueName,
-      processedBy: job.processedBy,
+      processedBy: job.processedBy ?? '',
     }));
   }
 

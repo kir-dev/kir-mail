@@ -61,6 +61,13 @@ export class ConsumerService implements OnModuleDestroy {
           subject: job.data.subject,
           html: job.data.html,
           replyTo: job.data.replyTo,
+          attachments: job.data.attachments?.map((a) => ({
+            filename: a.filename,
+            content: Buffer.from(a.content, 'base64'),
+            contentType: a.contentType,
+            disposition: a.disposition,
+            contentId: a.contentId,
+          })),
         });
       }
     } catch (error) {
