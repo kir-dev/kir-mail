@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard, PassportStrategy } from '@nestjs/passport';
-import { Token } from '@prisma/client';
 import { HeaderAPIKeyStrategy } from 'passport-headerapikey';
 
+import { Token } from '../../generated/client.js';
 import { TokenService } from '../token/token.service';
 
 @Injectable()

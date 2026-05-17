@@ -14,8 +14,8 @@
 
 import type { Configuration } from './configuration';
 import type { RequestArgs } from './base';
-import type { AxiosInstance, AxiosResponse } from 'axios';
 import { RequiredError } from './base';
+import type { AxiosInstance, AxiosResponse } from 'axios';
 
 /**
  *
@@ -157,7 +157,7 @@ export const createRequestFunction = function (
   return <T = unknown, R = AxiosResponse<T>>(axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
     const axiosRequestArgs = {
       ...axiosArgs.options,
-      url: (axios.defaults.baseURL ? '' : configuration?.basePath ?? basePath) + axiosArgs.url,
+      url: (axios.defaults.baseURL ? '' : (configuration?.basePath ?? basePath)) + axiosArgs.url,
     };
     return axios.request<T, R>(axiosRequestArgs);
   };

@@ -6,7 +6,7 @@ const Login = () => {
   const auth = useAuth();
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-accent to-background p-4'>
+    <div className='min-h-screen flex items-center justify-center bg-linear-to-br from-accent to-background p-4'>
       <Card className='w-full max-w-md animate-fade-in'>
         <CardHeader className='space-y-2 text-center'>
           <img src='/icon.png' alt='Kir-Mail' className='w-12 h-12 mx-auto' />

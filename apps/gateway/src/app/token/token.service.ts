@@ -1,7 +1,7 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { Token } from '@prisma/client';
 import * as crypto from 'crypto';
 
+import { Token } from '../../generated/client.js';
 import { CreateTokenDto } from '../../types/token.types';
 import { PrismaService } from '../prisma.service';
 
@@ -13,8 +13,8 @@ export class TokenService {
     return this.prisma.token.findMany();
   }
 
-  getApiKey(token: string): Promise<Token> {
-    return this.prisma.token.findFirst({
+  async getApiKey(token: string): Promise<Token | null> {
+    return await this.prisma.token.findFirst({
       where: {
         value: token,
       },

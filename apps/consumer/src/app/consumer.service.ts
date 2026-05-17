@@ -7,6 +7,7 @@ import {
   CONSUMER_NAME,
   DISABLE_EMAILS,
   INTERVAL,
+  JOBS_KEEP_AGE,
   MAIL_FROM,
   MAX_MESSAGES_PER_INTERVAL,
   QUEUE_IDS,
@@ -36,6 +37,7 @@ export class ConsumerService implements OnModuleDestroy {
             max: MAX_MESSAGES_PER_INTERVAL / QUEUE_IDS.length,
             duration: INTERVAL,
           },
+          removeOnComplete: { age: JOBS_KEEP_AGE },
         })
       );
     }
@@ -59,6 +61,13 @@ export class ConsumerService implements OnModuleDestroy {
           subject: job.data.subject,
           html: job.data.html,
           replyTo: job.data.replyTo,
+          attachments: job.data.attachments?.map((a) => ({
+            filename: a.filename,
+            content: Buffer.from(a.content, 'base64'),
+            contentType: a.contentType,
+            disposition: a.disposition,
+            contentId: a.contentId,
+          })),
         });
       }
     } catch (error) {

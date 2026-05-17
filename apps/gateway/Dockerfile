@@ -11,9 +11,11 @@ RUN addgroup --system ${SERVICE_NAME} && \
 
 COPY dist/apps/${SERVICE_NAME} .
 COPY prisma ./prisma
+COPY prisma.config.ts .
+COPY .yarnrc.yml .
 RUN chown -R ${SERVICE_NAME}:${SERVICE_NAME} .
 
-RUN yarn install --production --frozen-lockfile
-RUN yarn prisma generate
+RUN corepack enable
+RUN NODE_ENV=production yarn install --immutable
 
 CMD yarn prisma migrate deploy && node main.js

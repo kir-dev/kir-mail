@@ -1,5 +1,6 @@
 module.exports = {
   root: true,
+  ignorePatterns: ['apps/**/generated/**'],
   plugins: ['@nx', '@typescript-eslint/eslint-plugin', 'prettier', 'simple-import-sort'],
   overrides: [
     {

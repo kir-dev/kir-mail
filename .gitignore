@@ -8,6 +8,9 @@ tmp
 # dependencies
 node_modules
 
+# prisma generated client
+apps/gateway/src/generated
+
 # IDEs and editors
 /.idea
 .project
