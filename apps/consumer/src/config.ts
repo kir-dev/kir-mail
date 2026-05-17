@@ -17,3 +17,4 @@ export const QUEUE_IDS = env.get('QUEUE_IDS').required().asArray();
 export const MAX_MESSAGES_PER_INTERVAL = env.get('MAX_MESSAGES_PER_INTERVAL').required().asInt();
 export const INTERVAL = env.get('INTERVAL').required().asInt();
 export const CONSUMER_NAME = env.get('CONSUMER_NAME').required().asString();
+export const JOBS_KEEP_AGE = env.get('JOBS_KEEP_AGE').default('86400').asInt();

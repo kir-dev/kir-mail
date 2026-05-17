@@ -7,6 +7,7 @@ import {
   CONSUMER_NAME,
   DISABLE_EMAILS,
   INTERVAL,
+  JOBS_KEEP_AGE,
   MAIL_FROM,
   MAX_MESSAGES_PER_INTERVAL,
   QUEUE_IDS,
@@ -36,6 +37,7 @@ export class ConsumerService implements OnModuleDestroy {
             max: MAX_MESSAGES_PER_INTERVAL / QUEUE_IDS.length,
             duration: INTERVAL,
           },
+          removeOnComplete: { age: JOBS_KEEP_AGE },
         })
       );
     }
